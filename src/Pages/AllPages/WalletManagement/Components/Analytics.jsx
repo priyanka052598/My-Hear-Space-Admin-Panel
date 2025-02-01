@@ -1,5 +1,5 @@
 import React from 'react'
-import LinesScatterGrapgh from 'Utiles/LinesScatterGrapgh/LInesscatterGraph';
+import LinesScatterGrapgh from 'Utiles/LinesScatterGrapgh/LinesScatterGraph';
 
 
 function Analytics() {

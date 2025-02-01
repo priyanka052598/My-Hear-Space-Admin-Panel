@@ -5,7 +5,7 @@ import { FaPhone } from "react-icons/fa6";
 import { FaHouseUser } from "react-icons/fa";
 import Progressbar from 'Utiles/Progressbar/Progressbar';
 import CircularGraph from 'Utiles/CircularGraph/CircularGraph';
-import LinesScatterGrapgh from 'Utiles/LinesScatterGrapgh/LInesscatterGraph';
+import LinesScatterGrapgh from 'Utiles/LinesScatterGrapgh/LinesScatterGraph';
 import { GoStarFill } from "react-icons/go";
 
 
