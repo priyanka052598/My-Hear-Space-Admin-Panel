@@ -7,7 +7,7 @@ import Progressbar from 'Utiles/Progressbar/Progressbar';
 import CircularGraph from 'Utiles/CircularGraph/CircularGraph';
 // import LinesScatterGrapgh from 'Utiles/LinesScatterGrapgh/LinesScatterGraph';
 import { GoStarFill } from "react-icons/go";
-import LinesScatterGraph from 'Utiles/LinesScatterGrapgh/LinesScatterGraph';
+import LinesScatterGraph from "../../../../Utiles/LinesScatterGrapgh/LinesScatterGraph"
 
 
 
