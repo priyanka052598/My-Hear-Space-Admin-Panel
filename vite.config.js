@@ -1,8 +1,26 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tsconfigPaths from "vite-tsconfig-paths"
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(),tsconfigPaths()],
-})
+  plugins: [tsconfigPaths(), react()],
+  resolve: {
+    alias: {
+      '@': '/src', // Optional: Add a default alias for cleaner imports
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react')) return 'react';
+            if (id.includes('chart.js')) return 'chart';
+            return 'vendor';
+          }
+        },
+      },
+    },
+    chunkSizeWarningLimit: 600, // Increase chunk size limit if needed
+  },
+});
