@@ -1,5 +1,5 @@
 import React from 'react'
-import LinesScatterGrapgh from 'Utiles/LinesScatterGrapgh/LinesScatterGraph';
+// import LinesScatterGrapgh from 'Utiles/LinesScatterGrapgh/LinesScatterGraph';
 
 
 function Analytics() {
@@ -37,7 +37,7 @@ function Analytics() {
     Funds Credited 
     </div>
     <div className="grapgh">
-        <LinesScatterGrapgh className="w-full h-full"/>
+        {/* <LinesScatterGrapgh className="w-full h-full"/> */}
     </div>
 
     </div>
