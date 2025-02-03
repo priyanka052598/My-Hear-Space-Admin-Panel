@@ -16,10 +16,10 @@ function Adminheader() {
         <div className="notfication self-center p-[8px] rounded-[8px] border-[1px] border-[#808080] w-fit">
             <IoNotificationsOutline className='text-[30px]'/>
         </div>
-        <div className="profile p-[8px] gap-3 flex rounded-[8px] border-[1px] border-[#808080] w-fit">
+        <div className="profile py-[8px] px-[10px]  gap-3 flex rounded-[8px] border-[1px] border-[#808080] w-fit">
    <div className="user p-1 rounded-[4px] bg-[#808080]"><PiUserBold className='text-white text-[20px]'/> </div> 
    <span className='text-[16px] self-center'>Admin</span>
-    <GoPencil className='text-[24px] self-center'/>
+    {/* <GoPencil className='text-[24px] self-center'/> */}
         </div>
     </div>
 
