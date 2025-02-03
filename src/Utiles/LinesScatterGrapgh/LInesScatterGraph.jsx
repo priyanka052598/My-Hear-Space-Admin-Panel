@@ -13,7 +13,7 @@ import { Line } from "react-chartjs-2";
 // Register required Chart.js components
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend);
 
-const LinesScatterGraph = () => {
+function LinesScatterGraph  ()  {
   const data = {
     labels: [
       "Jan", "Feb", "Mar", "Apr", "May", 
@@ -27,7 +27,7 @@ const LinesScatterGraph = () => {
         data: [5000, 7000, 8000, 6500, 7200, 8500, 9100, 7500, 8300, 8800, 9400, 10000], // Y-axis values
         borderColor: "#000000",
         borderWidth: 2,
-        fill: true, // Enable fill under the line
+        fill: false, // Enable fill under the line
         backgroundColor: "rgba(0, 0, 0, 0.1)", // Light background under the line
         tension: 0, // Adds slight curve to the line
       },

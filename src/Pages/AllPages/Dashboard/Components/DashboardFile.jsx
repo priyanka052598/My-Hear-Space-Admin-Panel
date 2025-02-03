@@ -71,9 +71,9 @@ function DashboardFile() {
             <div className='left text-[24px] font-medium'>Overview</div>
             <div className="right ">
                     <span className='text-[16px] px-[12px] py-[6px] border-[1px] border-[#808080] rounded-[8px] mr-3'>Today</span>
-                    <span className='text-[16px] px-[12px] py-[6px] border-[1px] border-[#808080] rounded-[8px] mr-3'>Today</span>
-                    <span className='text-[16px] px-[12px] py-[6px] border-[1px] border-[#808080] rounded-[8px] mr-3'>Today</span>
-                    <span className='text-[16px] px-[12px] py-[6px] border-[1px] border-[#808080] rounded-[8px] mr-3'>Today</span>
+                    <span className='text-[16px] px-[12px] py-[6px] border-[1px] border-[#808080] rounded-[8px] mr-3'>Last 30 days</span>
+                    <span className='text-[16px] px-[12px] py-[6px] border-[1px] border-[#808080] rounded-[8px] mr-3'>Last 1 year</span>
+                    <span className='text-[16px] px-[12px] py-[6px] border-[1px] border-[#808080] rounded-[8px] mr-3'>Till Today</span>
 
 
             </div>

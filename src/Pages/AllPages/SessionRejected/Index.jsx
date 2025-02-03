@@ -113,7 +113,8 @@ function SessionRejected() {
                     <td className="p-3">{item.noOfTimesBan} </td>
                     <td className="p-3">{item.banStatus} </td>
                     <td className="p-3">{item.UnbanOn} </td>
-                    <td className="p  w-fit"> <Link >
+                    <td className="p  w-fit"> <Link   state={{ from: "Rejected" }} 
+  to={"/ListenerManagement/CreatedListener"}>
                                             <div
                                               className='border-[1px] cursor-pointer rounded-[6px] px-4 py-1 border-black w-fit'><IoArrowForward className='text-[18px] font-normal' /></div>
                                           </Link></td>

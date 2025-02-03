@@ -22,6 +22,7 @@ import SessionRejected from 'Pages/AllPages/SessionRejected/Index';
 import BannerManagement from 'Pages/AllPages/BannerManagement/Index';
 import AddNewBlog from 'Pages/AllPages/BlogManagement/Componenets/AddNewBlog';
 import EditBlog from 'Pages/AllPages/BlogManagement/Componenets/EditBlog';
+import { ToastContainer } from 'react-toastify';
 
 
 
@@ -32,6 +33,8 @@ function App() {
 
   return (
     <>
+      <ToastContainer/>
+
       <Router>
         <Routes>
           

@@ -1,6 +1,6 @@
 import Adminheader from 'Components/Adminheader'
 import Sidebar from 'Components/Sidebar'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoIosArrowForward } from 'react-icons/io'
 import { Link } from 'react-router-dom'
 import ListenerDetails from './Components/ListenerDetails'
@@ -8,12 +8,34 @@ import SessionDetails from './Components/SessionDetails'
 import RatingExp from './Components/RatingExp'
 import DeclinedSession from './Components/DeclinedSession'
 import PaymentDetails from './Components/PaymentDetails'
+import { useLocation } from "react-router-dom";
+
 
 function CreatedListener() {
+
+    const  location=useLocation();
+    const from =location.state?.from;
+    console.log(from,"from")
+    
+   
     const[activeTab,setActiveTab]=useState("Listener Details")
     let Tabs=[
         "Listener Details","Session Details","Ratings & Exp.","Declined Sessions","Payment Details"
-    ]
+    ];
+
+
+    useEffect(() => {
+      if (from=="Rejected") {
+        setActiveTab("Declined Sessions")
+        
+      }
+    
+     
+    }, [location])
+    
+
+
+   
     return (
     <div className='flex overflow-y-auto h-screen bg-[#F0F0F0]'>
             <Sidebar />
