@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoIosArrowForward } from "react-icons/io";
 import { FiPlus } from "react-icons/fi";
 import { CiSearch } from "react-icons/ci";
@@ -7,6 +7,7 @@ import { GoStarFill } from "react-icons/go";
 import { Link, useNavigate } from 'react-router-dom';
 import Sidebar from 'Components/Sidebar';
 import Adminheader from 'Components/Adminheader';
+import axios from 'axios';
 
 
 
@@ -17,121 +18,8 @@ function ListenerManagementTable() {
   const navigate = useNavigate();
 
 
-  
-  let tableData = [
-    {
-      name: "Mohit Asnani",
-      phone: "6355806885",
-      rating: "4.3",
-      experience: "1457",
-      wallet: "450",
-      status: "Update"
-    },
-    {
-      name: "Mohit Asnani",
-      phone: "6355806885",
-      rating: "4.3",
-      experience: "1457",
-      wallet: "450",
-      status: "Update"
-    },
-    {
-      name: "Mohit Asnani",
-      phone: "6355806885",
-      rating: "4.3",
-      experience: "1457",
-      wallet: "450",
-      status: "Update"
-    },
-    {
-      name: "Mohit Asnani",
-      phone: "6355806885",
-      rating: "4.3",
-      experience: "1457",
-      wallet: "450",
-      status: "Submitted"
-    },
-    {
-      name: "Mohit Asnani",
-      phone: "6355806885",
-      rating: "4.3",
-      experience: "1457",
-      wallet: "450",
-      status: "Submitted"
-    },
-    {
-      name: "Mohit Asnani",
-      phone: "6355806885",
-      rating: "4.3",
-      experience: "1457",
-      wallet: "450",
-      status: "Pending"
-    },
-    {
-      name: "Mohit Asnani",
-      phone: "6355806885",
-      rating: "4.3",
-      experience: "1457",
-      wallet: "450",
-      status: "Pending"
-    },
-    {
-      name: "Mohit Asnani",
-      phone: "6355806885",
-      rating: "4.3",
-      experience: "1457",
-      wallet: "450",
-      status: "Created"
-    },
-    {
-      name: "Mohit Asnani",
-      phone: "6355806885",
-      rating: "4.3",
-      experience: "1457",
-      wallet: "450",
-      status: "Created"
-    },
-    {
-      name: "Mohit Asnani",
-      phone: "6355806885",
-      rating: "4.3",
-      experience: "1457",
-      wallet: "450",
-      status: "Pending"
-    },
-    {
-      name: "Mohit Asnani",
-      phone: "6355806885",
-      rating: "4.3",
-      experience: "1457",
-      wallet: "450",
-      status: "Created"
-    },
-    {
-      name: "Mohit Asnani",
-      phone: "6355806885",
-      rating: "4.3",
-      experience: "1457",
-      wallet: "450",
-      status: "Created"
-    },
-    {
-      name: "Mohit Asnani",
-      phone: "6355806885",
-      rating: "4.3",
-      experience: "1457",
-      wallet: "450",
-      status: "Pending"
-    },
-    {
-      name: "Mohit Asnani",
-      phone: "6355806885",
-      rating: "4.3",
-      experience: "1457",
-      wallet: "450",
-      status: "Pending"
-    },
-  ];
+  const [listenersData, setListenersData] = useState([]);
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9; // Number of rows per page
@@ -139,10 +27,10 @@ function ListenerManagementTable() {
   // Calculate the indices for slicing the table data
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = tableData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = listenersData?.slice(indexOfFirstItem, indexOfLastItem);
 
   // Total number of pages
-  const totalPages = Math.ceil(tableData.length / itemsPerPage);
+  const totalPages = Math.ceil(listenersData?.length / itemsPerPage);
 
   // Handle Back button click
   const handleBack = () => {
@@ -176,6 +64,36 @@ function ListenerManagementTable() {
         break;
     }
   };
+
+  const getListeners = async () => {
+    try {
+      const token = localStorage.getItem("authToken"); // Retrieve and parse user data
+      // const token = user?.token; // Extract the token
+      
+  
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+  
+      const response = await axios.get("http://localhost:5001/api/admins/listeners/pending-profiles", {
+        headers: {
+          Authorization: `Bearer ${token}` // Include the token in the request
+        }
+      });
+  
+      setListenersData(response.data.listeners); // Ensure you're accessing response.data
+      response.data.listeners.length > 0 && console.log(response.data.listeners);
+    } catch (error) {
+      console.error("Error fetching listeners:", error);
+    }
+  };
+  
+  useEffect(() => {
+    getListeners();
+  }, []);
+  
+  // http://localhost:5001/api/admins/listeners/pending-profiles
   return (
     <div className='flex h-screen bg-[#F0F0F0]'>
         <Sidebar/>
@@ -266,18 +184,18 @@ function ListenerManagementTable() {
                 <td className="p-3 flex justify-start items-center gap-1">{item.rating} <GoStarFill/></td>
                 <td className="p-3">{item.experience} Hrs</td>
                 <td className="p-3">{item.wallet}</td>
-                <td className={`p-3 font-500 ${item.status === "Pending"
+                <td className={`p-3 font-500 ${item.profileStatus === "Pending"
                     ? "text-[#FF5D5D]"
-                    : item.status === "Created"
+                    : item.profileStatus === "Created"
                       ? "text-[#0D894F]"
-                      : item.status === "Submitted"
+                      : item.profileStatus === "Submitted"
                           ? "text-[#BD00FF]"
-                        : item.status === "Update"
+                        : item.profileStatus === "Update"
                           ? "text-[#0047FF]"
                           : ""
-                  }`}>{item.status}</td>
+                  }`}>{item.profileStatus}</td>
                 <td className="p  w-fit"> <div onClick={()=>{
-                  handleRowAction(item.status)
+                  handleRowAction(item.profileStatus)
                 }} className='border-[1px] cursor-pointer rounded-[6px] px-4 py-1 border-black w-fit'><IoArrowForward className='text-[18px] font-normal' /></div></td>
               </tr>
             ))}

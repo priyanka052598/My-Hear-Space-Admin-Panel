@@ -9,6 +9,8 @@ import { PiUserBold } from "react-icons/pi";
 
 
 function Adminheader() {
+  const storedUser = localStorage.getItem('user');
+  let user=JSON.parse(storedUser);
   return (
     <div className='w-[100%] sticky top-0 h-[70px] border-b-[1px] border-[#808080] bg-[#ffffff]'>
         
@@ -18,7 +20,7 @@ function Adminheader() {
         </div>
         <div className="profile py-[8px] px-[10px]  gap-3 flex rounded-[8px] border-[1px] border-[#808080] w-fit">
    <div className="user p-1 rounded-[4px] bg-[#808080]"><PiUserBold className='text-white text-[20px]'/> </div> 
-   <span className='text-[16px] self-center'>Admin</span>
+   <span className='text-[16px] self-center'>{user?.name || "Admin"}</span>
     {/* <GoPencil className='text-[24px] self-center'/> */}
         </div>
     </div>
@@ -28,3 +30,7 @@ function Adminheader() {
 }
 
 export default Adminheader
+
+
+
+
