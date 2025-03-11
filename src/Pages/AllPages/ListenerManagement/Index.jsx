@@ -19,6 +19,9 @@ function ListenerManagementTable() {
 
 
   const [listenersData, setListenersData] = useState([]);
+  const [sortByStatusFilter, setSortByStatusFilter] = useState("All")
+  const [sortByRatingFilter, setSortByRatingFilter] = useState("")
+  const [searchValue, setSearchValue] = useState("")
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,10 +31,11 @@ function ListenerManagementTable() {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = listenersData?.slice(indexOfFirstItem, indexOfLastItem);
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
 
   // Total number of pages
   const totalPages = Math.ceil(listenersData?.length / itemsPerPage);
-
+console.log("sortByStatusFilter",sortByStatusFilter,sortByRatingFilter,searchValue)
   // Handle Back button click
   const handleBack = () => {
     if (currentPage > 1) setCurrentPage((prev) => prev - 1);
@@ -54,7 +58,7 @@ function ListenerManagementTable() {
         navigate('/ListenerManagement/CreatedListener');
         break;
       case 'Submitted':
-        navigate('/SubmittedListener');
+        navigate('/ListenerManagement/CreatedListener');
         break;
       case 'Update':
         navigate('/UpdateListener');
@@ -76,14 +80,19 @@ function ListenerManagementTable() {
         return;
       }
   
-      const response = await axios.get("http://localhost:5001/api/admins/listeners/pending-profiles", {
+      const response = await axios.get(`${serverUrl}admins/listeners`, {
         headers: {
           Authorization: `Bearer ${token}` // Include the token in the request
+        },
+        params: {
+          search: searchValue,
+          status: sortByStatusFilter !== "All" ? sortByStatusFilter : "",
+          rating: sortByRatingFilter
         }
       });
   
-      setListenersData(response.data.listeners); // Ensure you're accessing response.data
-      response.data.listeners.length > 0 && console.log(response.data.listeners);
+      setListenersData(response.data.data); // Ensure you're accessing response.data
+      response.data.data.length > 0 && console.log(response.data.data);
     } catch (error) {
       console.error("Error fetching listeners:", error);
     }
@@ -91,9 +100,8 @@ function ListenerManagementTable() {
   
   useEffect(() => {
     getListeners();
-  }, []);
+  }, [searchValue, sortByStatusFilter, sortByRatingFilter]);
   
-  // http://localhost:5001/api/admins/listeners/pending-profiles
   return (
     <div className='flex h-screen bg-[#F0F0F0]'>
         <Sidebar/>
@@ -122,14 +130,14 @@ function ListenerManagementTable() {
       <div className='w-full flex gap-20 items-center my-4 '>
         <div className="search w-1/3 flex justify-start items-center bg-white rounded-3xl ">
           <CiSearch size={"27px"} className=' text-[#808080]  mx-[13px] ' />
-          <input className='w-full mr-3 py-2 rounded-3xl  outline-none bg-transparent' placeholder='Search by Listener Name..' type="text" />
+          <input value={searchValue} onChange={(e) => setSearchValue(e.target.value)} className='w-full mr-3 py-2 rounded-3xl  outline-none bg-transparent' placeholder='Search by Listener Name..' type="text" />
 
         </div>
         <div className="sortbystatus flex justify-center items-center gap-3  w-1/3">
           <span className='text-[16px] '>Sort by Status</span>
           <div className=' py-2 px-3 bg-white rounded-[8px] border-[1px] border-[#808080]'>
-            <select className='pr-12 border-white outline-none' name="" id="">
-              {
+            <select value={sortByStatusFilter} onChange={(e) => setSortByStatusFilter(e.target.value)}  className='pr-12 border-white outline-none' name="" id="">
+              { 
                 ["All", "Update", "Created ", "Pending", "Submitted"].map((item,) => {
                   return <option>{item}</option>
                 })
@@ -142,13 +150,15 @@ function ListenerManagementTable() {
         <div className="sortbyrating flex justify-center items-center gap-3  w-1/3">
           <span className='text-[16px] '>Sort by Rating</span>
           <div className=' py-2 px-3 bg-white rounded-[8px] border-[1px] border-[#808080]'>
-            <select className='pr-12 border-white outline-none' name="" id="">
-              <option>1 Star and above</option>
-              <option>1 Stare</option>
+            <select value={sortByRatingFilter} onChange={(e) => setSortByRatingFilter(e.target.value)} className='pr-12 border-white outline-none' name="" id="">
+            <option value="" >All</option>
+             
+              <option value="1" >1 Star and above</option>
 
-              <option>2 Star and above</option>
-              <option>3 Star and above</option>
-              <option>4 Star and above</option>
+
+              <option value={"2"} >2 Star and above</option>
+              <option value="3" >3 Star and above</option>
+              <option value={"4"}>4 Star and above</option>
             </select>
           </div>
 
@@ -181,9 +191,9 @@ function ListenerManagementTable() {
               >
                 <td className="p-3">{item.name}</td>
                 <td className="p-3">{item.phone}</td>
-                <td className="p-3 flex justify-start items-center gap-1">{item.rating} <GoStarFill/></td>
+                <td className="p-3 flex justify-start items-center gap-1">{item.overallRating} <GoStarFill/></td>
                 <td className="p-3">{item.experience} Hrs</td>
-                <td className="p-3">{item.wallet}</td>
+                <td className="p-3">{item.walletBalance}</td>
                 <td className={`p-3 font-500 ${item.profileStatus === "Pending"
                     ? "text-[#FF5D5D]"
                     : item.profileStatus === "Created"

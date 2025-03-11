@@ -2,6 +2,7 @@ import images from 'assets';
 import axios from 'axios';
 import React, { useState,useEffect} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { P } from '../../../../dist/assets/chart-B4PJgM5N';
 
 function Login() {
     const [email,setEmail]=useState("");
@@ -61,16 +62,17 @@ function Login() {
     setIsFormValid(validateForm())
     
     }, [email,password])
-    
+    const serverUrl = import.meta.env.VITE_SERVER_URL;
 
-  
+
+  console.log("process.env.VITE_SERVER_URL",serverUrl)
 
     const handleSubmit = async (e) => {
       e.preventDefault();
   
       if (validateForm()) {
           try {
-              const { data } = await axios.post('http://localhost:5001/api/admins/login', { email, password });
+              const { data } = await axios.post(`${serverUrl}admins/login`, { email, password });
   
               console.log('Login successful:', data);
               

@@ -1,23 +1,28 @@
+import axios from 'axios';
 import Adminheader from 'Components/Adminheader'
 import Sidebar from 'Components/Sidebar'
 import React, { useEffect, useState } from 'react'
 import { IoIosArrowForward } from 'react-icons/io'
 import { Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
+import { N } from '../../../../dist/assets/react-MW7fQFJQ';
 
 
 
 function RateManagement() {
   const sessionDefaultValues = { chat: 10, phone: 20, video: 30 };
-  const [sessionValues, setSessionValues] = useState(sessionDefaultValues);
+  const [sessionValues, setSessionValues] = useState({});
   const [isSessionEditing, setIsSessionEditing] = useState(false);
-  const [tempValues, setTempValues] = useState(sessionDefaultValues);
+  const [tempValues, setTempValues] = useState({});
 
 
   const commissionDefaultValues ={chat:5,phone:7,video:10};
-  const[commissionValue,setCommissionValue]=useState(commissionDefaultValues);
+  const[commissionValue,setCommissionValue]=useState({});
   const[isCommissionEditing,setIsCommissionEditing]=useState(false);
-  const[commissionTempValue,setCommissionTempValue]=useState(commissionDefaultValues);
+  const[commissionTempValue,setCommissionTempValue]=useState({});
+
+
+  const[settingData,setSettingData]=useState([]);
 
 
 
@@ -32,7 +37,8 @@ function RateManagement() {
   };
 
   const sessionHandleSaveClick = () => {
-    setSessionValues(tempValues);
+    setTempValues(tempValues);
+    updateSessionCharges()
     setIsSessionEditing(false);
     toast.success("Changes Saved!"); // Show toast
 
@@ -44,17 +50,114 @@ function RateManagement() {
 
   const commissionHandleSaveClick=()=>{
     setIsCommissionEditing(false)
-setSessionValues(commissionTempValue) 
+    updateCommissionCharges()
+setCommissionTempValue(commissionTempValue) 
 toast.success("Changes Saved!"); // Show toast
 };
 
   const commissionHandleCancelClick=()=>{
     setCommissionValue(commissionTempValue)
     setIsCommissionEditing(false)
+}
+
+const serverUrl = import.meta.env.VITE_SERVER_URL;
 
 
+const getSetting = async () => {
+  try {
+    const token = localStorage.getItem("authToken"); // Retrieve and parse user data
+    // const token = user?.token; // Extract the token
+    console.log(token,"token")
 
+    if (!token) {
+      console.error("No token found");
+      return;
+    }
+
+    const response = await axios.get(`${serverUrl}admins/settings`, {
+      headers: {
+        Authorization: `Bearer ${token}` // Include the token in the request
+      }
+    });
+console.log("response",response.data)
+setTempValues(response.data.sessionCharges)
+setCommissionTempValue(response.data.commissionPercentage)
+    setSettingData(response.data); // Ensure you're accessing response.data
+    response.data.length > 0 && console.log(response.data);
+  } catch (error) {
+    console.error("Error fetching listeners:", error);
   }
+};
+console.log("sessionValues",sessionValues)
+const updateSessionCharges = async () => {
+  try {
+    const token = localStorage.getItem("authToken"); // Retrieve and parse user data
+    // const token = user?.token; // Extract the token
+    console.log(token,"token")
+
+    if (!token) {
+      console.error("No token found");
+      return;
+    }
+
+    const response = await axios.put(`${serverUrl}admins/settings/session-charges`,   {
+     
+      "chat": Number(tempValues.chat),
+      "phoneCall": Number(tempValues.phoneCall),
+      "videoCall": Number(tempValues.videoCall)
+    
+    },{
+      headers: {
+        Authorization: `Bearer ${token}` // Include the token in the request
+      },
+      
+    });
+console.log("response",response.data)
+setTempValues(response.settings.sessionCharges)
+setCommissionTempValue(response.settings.commissionPercentage)
+    setSettingData(response.settings); // Ensure you're accessing response.data
+    response.data.length > 0 && console.log(response.data);
+  } catch (error) {
+    console.error("Error fetching listeners:", error);
+  }
+};
+
+const updateCommissionCharges = async () => {
+  try {
+    const token = localStorage.getItem("authToken"); // Retrieve and parse user data
+    // const token = user?.token; // Extract the token
+    console.log(token,"token")
+
+    if (!token) {
+      console.error("No token found");
+      return;
+    }
+
+    const response = await axios.put(`${serverUrl}admins/settings/commission-percentage`,   {
+     
+      "chat": Number(commissionTempValue.chat),
+      "phoneCall": Number(commissionTempValue.phoneCall),
+      "videoCall": Number(commissionTempValue.videoCall)
+    
+    },{
+      headers: {
+        Authorization: `Bearer ${token}` // Include the token in the request
+      },
+      
+    });
+console.log("response",response.data)
+setTempValues(response.settings.sessionCharges)
+setCommissionTempValue(response.settings.commissionPercentage)
+    setSettingData(response.settings); // Ensure you're accessing response.data
+    response.data.length > 0 && console.log(response.data);
+  } catch (error) {
+    console.error("Error fetching listeners:", error);
+  }
+};
+
+useEffect(() => {
+  getSetting();
+}, []);
 
 
   
@@ -98,9 +201,9 @@ toast.success("Changes Saved!"); // Show toast
 <div className='flex gap-[40px] w-full'>
 
 
-        {["chat", "phone", "video"].map((type, index) => (
+        {["chat", "phoneCall", "videoCall"].map((type, index) => (
           <div key={index} className="w-1/3 flex flex-col gap-[8px]">
-            <span>{type.charAt(0).toUpperCase() + type.slice(1)} {type!=="chat"?'call':""}</span>
+            <span>  {type === "chat" ? "Chat" : type === "phoneCall" ? "Phone Call" : "Video Call"}</span>
             <div className="px-[24px] text-[18px] rounded-[12px] py-[12px] border-[1px] border-[#808080] flex justify-between items-center">
               <input
                 className="outline-none bg-transparent w-full"
@@ -156,9 +259,9 @@ toast.success("Changes Saved!"); // Show toast
 <div className='flex gap-[40px] w-full'>
 
 
-        {["chat", "phone", "video"].map((type, index) => (
+        {["chat", "phoneCall", "videoCall"].map((type, index) => (
           <div key={index} className="w-1/3 flex flex-col gap-[8px]">
-            <span>{type.charAt(0).toUpperCase() + type.slice(1)} {type!=="chat"?'call':""}</span>
+            <span>  {type === "chat" ? "Chat" : type === "phoneCall" ? "Phone Call" : "Video Call"}</span>
             <div className="px-[24px] text-[18px] rounded-[12px] py-[12px] border-[1px] border-[#808080] flex justify-between items-center">
               <input
                 className="outline-none bg-transparent w-full"
