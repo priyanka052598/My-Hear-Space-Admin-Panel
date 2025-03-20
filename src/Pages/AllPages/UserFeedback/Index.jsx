@@ -1,41 +1,64 @@
+import axios from 'axios';
 import Adminheader from 'Components/Adminheader';
 import Sidebar from 'Components/Sidebar';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GoStarFill } from 'react-icons/go';
 import { IoIosArrowForward } from 'react-icons/io';
 import { IoArrowBack, IoArrowForward } from 'react-icons/io5';
 import { Link, useNavigate } from 'react-router-dom';
 
 function UserFeedback() {
+const navigate = useNavigate();
+const serverUrl = import.meta.env.VITE_SERVER_URL;
+const [feedbacks, setFeedbacks] = useState([   {
+    timestamp: "10/12/24",
+    phone: "6355806885",
+    rating: "4.3",
+    experienceWord: "Great!",
+    review: "This app has been a lifesaver! Being able to talk to a caring listener anytime has really helped me feel supported during tough times.",
+},])
+const [minRating, setMinRating] = useState(1);  // Default is 1 star
 
-    const navigate = useNavigate();
+
+const getListeners = async () => {
+    try {
+        const token = localStorage.getItem("authToken");
+        
+        if (!token) {
+            console.error("No token found");
+            return;
+        }
+
+        const response = await axios.get(`${serverUrl}feedback/all`, {
+            headers: { Authorization: `Bearer ${token}` },
+            params: { minRating }
+        });
+
+        // Ensure response contains data before updating state
+        if (response.data && Array.isArray(response.data.data)) {
+            setFeedbacks(response.data.data); // Update state with correct array
+        } else {
+            console.error("Invalid response format:", response.data);
+            setFeedbacks([]); // Fallback to an empty array to prevent errors
+        }
+    } catch (error) {
+        console.error("Error fetching listeners:", error);
+        setFeedbacks([]); // Fallback to empty array in case of error
+    }
+};
 
 
 
-    let tableData = [
-        {
-            date: "10/12/24",
-            phone: "6355806885",
-            rating: "4.3",
-            experience: "Great!",
-            review: "This app has been a lifesaver! Being able to talk to a caring listener anytime has really helped me feel supported during tough times.",
-        },
-        {
-            date: "10/12/24",
-            phone: "6355806885",
-            rating: "4.3",
-            experience: "Great!",
-            review: "I love the concept and appreciate the effort to provide a safe space. However, the app crashed twice during my call, and I lost money for those sessions.This app has been a lifesaver! Being able to talk to a caring listener anytime has really helped me feel supported during tough times.",
-        },
-        {
-            date: "10/12/24",
-            phone: "6355806885",
-            rating: "4.3",
-            experience: "Great!",
-            review: "-",
-        },
+ useEffect(() => {
+    getListeners();
+  }, []);
 
-    ];
+  useEffect(() => {
+    getListeners();
+}, [minRating]);  // Fetch data when minRating updates
+
+   
+
     // Pagination state
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 9; // Number of rows per page
@@ -43,10 +66,10 @@ function UserFeedback() {
     // Calculate the indices for slicing the table data
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = tableData.slice(indexOfFirstItem, indexOfLastItem);
+    const currentItems = feedbacks?.slice(indexOfFirstItem, indexOfLastItem);
 
     // Total number of pages
-    const totalPages = Math.ceil(tableData.length / itemsPerPage);
+    const totalPages = Math.ceil(feedbacks?.length / itemsPerPage);
 
     // Handle Back button click
     const handleBack = () => {
@@ -57,6 +80,15 @@ function UserFeedback() {
     const handleNext = () => {
         if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
     };
+
+
+    const handleRatingChange = (event) => {
+        const selectedRating = event.target.value;
+        setMinRating(selectedRating);  // Update state
+    };
+    
+
+
 
     return (
         <div>  <div className='flex h-screen bg-[#F0F0F0]'>
@@ -87,14 +119,14 @@ function UserFeedback() {
                         <div className="sortbyrating flex justify-end  items-center gap-3  w-1/3">
                             <span className='text-[16px] '>Sort by Rating</span>
                             <div className=' py-2 px-3 bg-white rounded-[8px] border-[1px] border-[#808080]'>
-                                <select className='pr-12 border-white outline-none' name="" id="">
-                                    <option>1 Star and above</option>
+                            <select className="pr-12 border-white outline-none" onChange={handleRatingChange}>
+    <option value="1">1 Star and above</option>
+    <option value="2">2 Stars and above</option>
+    <option value="3">3 Stars and above</option>
+    <option value="4">4 Stars and above</option>
+    <option value="5">Only 5 Stars</option>
+</select>
 
-                                    <option>2 Star and above</option>
-                                    <option>3 Star and above</option>
-                                    <option>4 Star and above</option>
-                                    <option>Only 5 Star</option>
-                                </select>
                             </div>
 
                         </div>
@@ -122,14 +154,14 @@ function UserFeedback() {
                                         // } text-black`}
                                         className='border-b-[1px] border-[#D9D9D9]'
                                     >
-                                        <td className="p-3">{item.date}</td>
+                                        <td className="p-3">{item.timestamp.slice(0, 10)}</td>
                                         <td className="p-3">{item.phone}</td>
                                         <td className="p-3 align-middle">
                                             <div className="flex items-center gap-1">
                                                 {item.rating} <GoStarFill />
                                             </div>
                                         </td>
-                                        <td className="p-3">{item.experience} </td>
+                                        <td className="p-3">{item.experienceWord} </td>
                                         <td className="p-3 w-1/2">{item.review}</td>
 
 
