@@ -49,25 +49,26 @@ console.log("sortByStatusFilter",sortByStatusFilter,sortByRatingFilter,searchVal
 
 
 
-  const handleRowAction = (status) => {
-    switch (status) {
-      case 'Pending':
-        navigate('/PendingListener');
-        break;
-      case 'Created':
-        navigate('/ListenerManagement/CreatedListener');
-        break;
-      case 'Submitted':
-        navigate('/ListenerManagement/CreatedListener');
-        break;
-      case 'Update':
-        navigate('/UpdateListener');
-        break;
-      default:
-        console.error('Unknown status:', status);
-        break;
-    }
-  };
+
+const handleRowAction = (status, additionalParams) => {
+  switch (status) {
+    case "Pending":
+    case "Created":
+    case "Submitted":
+      navigate("/ListenerManagement/CreatedListener", {
+        state: { status, ...additionalParams },
+      });
+      break;
+    case "Update":
+      navigate("/ListenerManagement/UpdateListener", {
+        state: { status, ...additionalParams },
+      });
+      break;
+    default:
+      console.error("Unknown status:", status);
+      break;
+  }
+};
 
   const getListeners = async () => {
     try {
@@ -205,7 +206,7 @@ console.log("sortByStatusFilter",sortByStatusFilter,sortByRatingFilter,searchVal
                           : ""
                   }`}>{item.profileStatus}</td>
                 <td className="p  w-fit"> <div onClick={()=>{
-                  handleRowAction(item.profileStatus)
+                  handleRowAction(item.profileStatus, item);
                 }} className='border-[1px] cursor-pointer rounded-[6px] px-4 py-1 border-black w-fit'><IoArrowForward className='text-[18px] font-normal' /></div></td>
               </tr>
             ))}

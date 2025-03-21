@@ -2,7 +2,8 @@ import images from 'assets';
 import axios from 'axios';
 import React, { useState,useEffect} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { P } from '../../../../dist/assets/chart-B4PJgM5N';
+import { toast } from 'react-toastify';
+// import { P } from '../../../../dist/assets/chart-B4PJgM5N';
 
 function Login() {
     const [email,setEmail]=useState("");
@@ -86,10 +87,11 @@ function Login() {
 
             console.log('Token:', token);
             console.log('User:', user);
-
+toast.success(data.message);
               navigate('/Dashboard')
               // Handle successful login (e.g., store token, redirect user)
           } catch (error) {
+            toast.error(error.response.data.message);
               console.error('Login failed:', error.response?.data?.message || error.message);
           }
       }

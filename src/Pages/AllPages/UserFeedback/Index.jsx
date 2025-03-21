@@ -35,8 +35,8 @@ const getListeners = async () => {
         });
 
         // Ensure response contains data before updating state
-        if (response.data && Array.isArray(response.data.data)) {
-            setFeedbacks(response.data.data); // Update state with correct array
+        if (response.data && Array.isArray(response.data)) {
+            setFeedbacks(response.data); // Update state with correct array
         } else {
             console.error("Invalid response format:", response.data);
             setFeedbacks([]); // Fallback to an empty array to prevent errors

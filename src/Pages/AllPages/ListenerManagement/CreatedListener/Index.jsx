@@ -15,7 +15,7 @@ function CreatedListener() {
 
     const  location=useLocation();
     const from =location.state?.from;
-    console.log(from,"from")
+    console.log(location.state, "from");
     
    
     const[activeTab,setActiveTab]=useState("Listener Details")
