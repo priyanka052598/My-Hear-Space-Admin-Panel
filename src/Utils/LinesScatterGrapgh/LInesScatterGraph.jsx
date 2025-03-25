@@ -13,18 +13,58 @@ import { Line } from "react-chartjs-2";
 // Register required Chart.js components
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend);
 
-function LinesScatterGraph  ()  {
+function LinesScatterGraph({ monthlyData }) {
+console.log("monthlyData", monthlyData);
+
+if (!monthlyData || typeof monthlyData !== "object") {
+  console.error("Invalid monthlyData format:", monthlyData);
+  return <p>Error: Invalid Data</p>; // Show error message instead of crashing
+}
+
+const formattedData = Object.entries(monthlyData || {}).map(
+  ([month, value]) => ({
+    x: month.slice(0, 3), // Shorten to "Jan", "Feb", etc.
+    y: value || 0, // Ensure a default value
+  })
+);
+
+ const monthsOrder = [
+   "January",
+   "February",
+   "March",
+   "April",
+   "May",
+   "June",
+   "July",
+   "August",
+   "September",
+   "October",
+   "November",
+   "December",
+ ];
+console.log("formattedData", formattedData);
+  const lineGraphData = monthsOrder.map((month) => monthlyData?.[month] ?? 0);
+
   const data = {
     labels: [
-      "Jan", "Feb", "Mar", "Apr", "May", 
-      "June", "July", "Aug", "Sept", "Oct", 
-      "Nov", "Dec"
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "June",
+      "July",
+      "Aug",
+      "Sept",
+      "Oct",
+      "Nov",
+      "Dec",
     ], // X-axis labels (Months)
     datasets: [
       {
         type: "line", // Line graph
         label: "Trend of Funds Credited",
-        data: [5000, 7000, 8000, 6500, 7200, 8500, 9100, 7500, 8300, 8800, 9400, 10000], // Y-axis values
+        data: lineGraphData, // Y-axis values
         borderColor: "#000000",
         borderWidth: 2,
         fill: false, // Enable fill under the line
@@ -34,20 +74,7 @@ function LinesScatterGraph  ()  {
       {
         type: "scatter", // Scatter plot
         label: "Actual Funds Credited",
-        data: [
-          { x: "Jan", y: 5000 },
-          { x: "Feb", y: 7000 },
-          { x: "Mar", y: 8000 },
-          { x: "Apr", y: 6500 },
-          { x: "May", y: 7200 },
-          { x: "June", y: 8500 },
-          { x: "July", y: 9100 },
-          { x: "Aug", y: 7500 },
-          { x: "Sept", y: 8300 },
-          { x: "Oct", y: 8800 },
-          { x: "Nov", y: 9400 },
-          { x: "Dec", y: 10000 },
-        ],
+        data: formattedData,
         backgroundColor: "#000000",
         pointRadius: 4, // Adjusted point size for scatter
       },

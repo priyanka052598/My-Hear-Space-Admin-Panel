@@ -2,6 +2,8 @@ import Adminheader from 'Components/Adminheader'
 import Sidebar from 'Components/Sidebar'
 import React, { useEffect, useState } from 'react'
 import DashboardFile from './Components/DashboardFile'
+import axios from 'axios';
+import API_ENDPOINTS from 'Configs/Endpoints';
 
 function Dashboard() {
   // State to store user data
@@ -15,7 +17,6 @@ function Dashboard() {
       setUser(JSON.parse(storedUser)); // Parse the JSON string
     }
   }, []);
-  
   return (
     <div>
       <div className='flex h-screen bg-[#F0F0F0]'>

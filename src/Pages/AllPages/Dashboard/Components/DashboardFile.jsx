@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { HiUsers } from "react-icons/hi2";
 import { LuIndianRupee } from "react-icons/lu";
 import { FaPhone } from "react-icons/fa6";
@@ -7,9 +7,39 @@ import Progressbar from "Utils/Progressbar/Progressbar";
 import CircularGraph from "Utils/CircularGraph/CircularGraph";
 // import LinesScatterGrapgh from 'Utiles/LinesScatterGrapgh/LinesScatterGraph';
 import { GoStarFill } from "react-icons/go";
+import axios from "axios";
+import API_ENDPOINTS from "Configs/Endpoints";
+import LinesScatterGraph from "Utils/LinesScatterGrapgh/LInesScatterGraph";
 // import LinesScatterGraph from "../../../../Utiles/LinesScatterGrapgh/LinesScatterGraph"
 
 function DashboardFile() {
+  const [dashbaordData, setDashbaordData] = useState();
+
+
+
+
+   const getDashboard = async () => {
+     try {
+       const token = localStorage.getItem("authToken");
+
+       if (!token) {
+         console.error("No token found");
+         return;
+       }
+
+       const response = await axios.get(`${API_ENDPOINTS.getDasboard}`, {
+         headers: { Authorization: `Bearer ${token}` },
+       });
+       console.log("response", response.data);
+       setDashbaordData(response.data);
+     } catch (error) {
+       console.error("Error fetching listeners:", error);
+     }
+   };
+
+   useEffect(() => {
+     getDashboard();
+   }, []);
   const VerticalMaleProgressbar = ({ progress }) => {
     return (
       <div
@@ -56,7 +86,26 @@ function DashboardFile() {
       </div>
     );
   };
+const getProgress = (value, total) => (total > 0 ? (value / total) * 100 : 0);
 
+let sessions = dashbaordData?.sessions
+
+let listenerComparison = dashbaordData?.listenerComparison
+ const { male, female } = listenerComparison || {};
+  const total = male + female;
+  const malePercentage = total > 0 ? (male / total) * 100 : 0;
+  const femalePercentage = total > 0 ? (female / total) * 100 : 0;
+
+
+let ratingBreakdown = dashbaordData?.overallRating?.ratingBreakdown || {};
+   const totalRatings = Object.values(ratingBreakdown).reduce(
+     (a, b) => a + b,
+     0
+   );
+let sessionComparison = dashbaordData?.sessionComparison
+     const { chat, phoneCall, videoCall } = sessionComparison || {};
+
+console.log("dashbaordData?.userDetails,", dashbaordData?.userDetails);
   return (
     <div className="w-full overflow-y-auto h-screen  scrollbar-none  p-7 ">
       {/* OVerview Portion */}
@@ -83,28 +132,38 @@ function DashboardFile() {
             <div className="icon p-2 bg-[#F0F0F0] rounded-[12px] mb-2">
               <HiUsers className="text-[28px]" />
             </div>
-            <span className="text-[32px]">250</span>
+            <span className="text-[32px]">
+              {dashbaordData?.overview.newUsers}
+            </span>
             <span className="text-[16px] text-[#808080]">New Users</span>
           </div>
           <div className="Listeners w-1/4 border-[1px] rounded-[16px] border-[#808080] py-5 flex flex-col justify-center items-center">
             <div className="icon p-2 bg-[#F0F0F0] rounded-[12px] mb-2">
               <FaHouseUser className="text-[28px]" />
             </div>
-            <span className="text-[32px]">1,000 </span>
+            <span className="text-[32px]">
+              {" "}
+              {dashbaordData?.overview.newListeners}{" "}
+            </span>
             <span className="text-[16px] text-[#808080]">New Listeners</span>
           </div>
           <div className="newusers w-1/4 border-[1px] rounded-[16px] border-[#808080] py-5 flex flex-col justify-center items-center">
             <div className="icon p-2 bg-[#F0F0F0] rounded-[12px] mb-2">
               <LuIndianRupee className="text-[28px]" />
             </div>
-            <span className="text-[32px]">14,563</span>
+            <span className="text-[32px]">
+              {dashbaordData?.overview.totalCredited}
+            </span>
             <span className="text-[16px] text-[#808080]">Total Credited </span>
           </div>
           <div className="newusers w-1/4 border-[1px] rounded-[16px] border-[#808080] py-5 flex flex-col justify-center items-center">
             <div className="icon p-2 bg-[#F0F0F0] rounded-[12px] mb-2">
               <FaPhone className="text-[28px]" />
             </div>
-            <span className="text-[32px]">10,00,700</span>
+            <span className="text-[32px]">
+              {" "}
+              {dashbaordData?.overview.totalSessions}
+            </span>
             <span className="text-[16px] text-[#808080]">Total Sessions</span>
           </div>
         </div>
@@ -117,7 +176,7 @@ function DashboardFile() {
         <div className="boxes flex gap-3 w-full">
           <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
             <span className="text-[24px] text-black mb-2 font-medium">
-              ₹45,620.45
+              ₹ {dashbaordData?.paymentOverview.successfulPayments}
             </span>
             <span className=" text-[16px] text-[#808080] text-center">
               Successful Payments to Listener
@@ -125,34 +184,34 @@ function DashboardFile() {
           </div>
           <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
             <span className="text-[24px] text-black mb-2 font-medium">
-              ₹45,620.45
+              ₹{dashbaordData?.paymentOverview.pendingPayments}
             </span>
             <span className=" text-[16px] text-[#808080] text-center">
-              Successful Payments to Listener
+              Pending Payments to Listener
             </span>
           </div>
           <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
             <span className="text-[24px] text-black mb-2 font-medium">
-              ₹45,620.45
+              ₹{dashbaordData?.paymentOverview.listenerWalletBalance}
             </span>
             <span className=" text-[16px] text-[#808080] text-center">
-              Successful Payments to Listener
+              Listener’s wallet balance
             </span>
           </div>
           <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
             <span className="text-[24px] text-black mb-2 font-medium">
-              ₹45,620.45
+              ₹{dashbaordData?.paymentOverview.userWalletBalance}
             </span>
             <span className=" text-[16px] text-[#808080] text-center">
-              Successful Payments to Listener
+              User’s wallet balance
             </span>
           </div>
           <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
             <span className="text-[24px] text-black mb-2 font-medium">
-              ₹45,620.45
+              ₹{dashbaordData?.paymentOverview.totalAmountCredited}
             </span>
             <span className=" text-[16px] text-[#808080] text-center">
-              Successful Payments to Listener
+              Total Amount Credited
             </span>
           </div>
         </div>
@@ -162,33 +221,50 @@ function DashboardFile() {
         <div className="ongoingsessions px-[40px]   py-[24px] rounded-[24px] bg-white w-[50%]">
           <div className="heading mb-7 flex justify-between">
             <span className="text-[24px] text-black">Ongoing Sessions</span>
-            <span className="text-[24px] text-black">1440</span>
+            <span className="text-[24px] text-black">
+              {dashbaordData?.sessions.ongoingSessions}
+            </span>
           </div>
           <div className="botom  w-full">
             <div className="chat text-[20px] w-full flex justify-between">
               <div>Chat</div>
               <div className="progress w-2/3 flex justify-end items-center gap-[10px]">
-                <span>200</span>
+                <span>{dashbaordData?.sessions.chatSessions}</span>
                 <div className="w-[130px]">
-                  <Progressbar progress={40} />
+                  <Progressbar
+                    progress={getProgress(
+                      sessions?.chatSessions,
+                      sessions?.ongoingSessions
+                    )}
+                  />
                 </div>
               </div>
             </div>
             <div className="chat my-3 text-[20px] w-full flex justify-between">
               <div>Phone Call</div>
               <div className="progress w-2/3   flex justify-end items-center gap-[10px]">
-                <span>1200</span>
+                <span>{dashbaordData?.sessions.phoneCallSessions}</span>
                 <div className="w-[130px]">
-                  <Progressbar progress={80} />
+                  <Progressbar
+                    progress={getProgress(
+                      sessions?.phoneCallSessions,
+                      sessions?.ongoingSessions
+                    )}
+                  />
                 </div>
               </div>
             </div>
             <div className="chat text-[20px] w-full flex justify-between">
               <div>Video Call</div>
               <div className="progress w-2/3 flex justify-end items-center gap-[10px]">
-                <span>40</span>
+                <span>{dashbaordData?.sessions.videoCallSessions}</span>
                 <div className="w-[130px]">
-                  <Progressbar progress={10} />
+                  <Progressbar
+                    progress={getProgress(
+                      sessions?.videoCallSessions,
+                      sessions?.ongoingSessions
+                    )}
+                  />
                 </div>
               </div>
             </div>
@@ -197,33 +273,50 @@ function DashboardFile() {
         <div className="totalsessions px-[40px]   py-[24px] rounded-[24px] bg-white w-[50%]">
           <div className="heading mb-7 flex justify-between">
             <span className="text-[24px] text-black">Total Sessions</span>
-            <span className="text-[24px] text-black">10,00,700</span>
+            <span className="text-[24px] text-black">
+              {dashbaordData?.sessions.totalSessions}
+            </span>
           </div>
           <div className="botom  w-full">
             <div className="chat text-[20px] w-full flex justify-between">
               <div>Accepted</div>
               <div className="progress w-2/3 flex justify-end items-center gap-[10px]">
-                <span>10,00,000</span>
+                <span>{dashbaordData?.sessions.acceptedSessions}</span>
                 <div className="w-[130px]">
-                  <Progressbar progress={40} />
+                  <Progressbar
+                    progress={getProgress(
+                      sessions?.acceptedSessions,
+                      sessions?.totalSessions
+                    )}
+                  />
                 </div>
               </div>
             </div>
             <div className="chat my-3 text-[20px] w-full flex justify-between">
               <div>Missed </div>
               <div className="progress w-2/3   flex justify-end items-center gap-[10px]">
-                <span>500</span>
+                <span>{dashbaordData?.sessions.missedSessions}</span>
                 <div className="w-[130px]">
-                  <Progressbar progress={80} />
+                  <Progressbar
+                    progress={getProgress(
+                      sessions?.missedSessions,
+                      sessions?.totalSessions
+                    )}
+                  />
                 </div>
               </div>
             </div>
             <div className="chat text-[20px] w-full flex justify-between">
               <div>Rejected </div>
               <div className="progress w-2/3 flex justify-end items-center gap-[10px]">
-                <span>240</span>
+                <span>{dashbaordData?.sessions.rejectedSessions}</span>
                 <div className="w-[130px]">
-                  <Progressbar progress={10} />
+                  <Progressbar
+                    progress={getProgress(
+                      sessions?.rejectedSessions,
+                      sessions?.totalSessions
+                    )}
+                  />
                 </div>
               </div>
             </div>
@@ -234,7 +327,7 @@ function DashboardFile() {
       <div className="circulargrapgh flex gap-3 my-5 w-full">
         <div className="listenerdetails flex justify-between items-center px-[40px]   py-[30px] rounded-[24px] bg-white w-[50%]">
           <div className="graph w-1/3">
-            <CircularGraph />
+            <CircularGraph listenerDetails={dashbaordData?.listenerDetails} />
           </div>
           <div className="text w-1/2">
             <div className="heading    text-center text-[20px]">
@@ -246,31 +339,40 @@ function DashboardFile() {
                   <div className="circle w-3 h-3 bg-black rounded-full"></div>
                   <span className="text-[16px]">In session</span>
                 </div>
-                <span className="text-[16px]">1440</span>
+                <span className="text-[16px]">
+                  {dashbaordData?.listenerDetails.inSession}
+                </span>
               </div>
               <div className="1 flex justify-between items-center">
                 <div className="flex justify-start items-center gap-2">
                   <div className="circle w-3 h-3 bg-[#808080] rounded-full"></div>
                   <span className="text-[16px]"> Online</span>
                 </div>
-                <span className="text-[16px]">1440</span>
+                <span className="text-[16px]">
+                  {" "}
+                  {dashbaordData?.listenerDetails.online}
+                </span>
               </div>
               <div className="1 flex pb-2 border-b-[1px] border-[#D9D9D9] justify-between items-center">
                 <div className="flex justify-start items-center gap-2">
                   <div className="circle w-3 h-3 bg-[#D9D9D9] rounded-full"></div>
                   <span className="text-[16px]">Offline</span>
                 </div>
-                <span className="text-[16px]">1440</span>
+                <span className="text-[16px]">
+                  {" "}
+                  {dashbaordData?.listenerDetails.offline}
+                </span>
               </div>
             </div>
             <div className="strenth flex  text-[16px] justify-between items-center">
-              <span>Total strenth</span> <span>12407</span>
+              <span>Total strenth</span>{" "}
+              <span> {dashbaordData?.listenerDetails.totalStrength}</span>
             </div>
           </div>
         </div>
         <div className="usersdetails flex justify-between items-center px-[40px]   py-[30px] rounded-[24px] bg-white w-[50%]">
           <div className="graph w-1/3">
-            <CircularGraph />
+            <CircularGraph listenerDetails={dashbaordData?.userDetails} />
           </div>
           <div className="text w-1/2">
             <div className="heading    text-center text-[20px]">
@@ -282,25 +384,34 @@ function DashboardFile() {
                   <div className="circle w-3 h-3 bg-black rounded-full"></div>
                   <span className="text-[16px]">In session</span>
                 </div>
-                <span className="text-[16px]">1440</span>
+                <span className="text-[16px]">
+                  {dashbaordData?.userDetails.inSession}
+                </span>
               </div>
               <div className="1 flex justify-between items-center">
                 <div className="flex justify-start items-center gap-2">
                   <div className="circle w-3 h-3 bg-[#808080] rounded-full"></div>
                   <span className="text-[16px]"> Online</span>
                 </div>
-                <span className="text-[16px]">1440</span>
+                <span className="text-[16px]">
+                  {" "}
+                  {dashbaordData?.userDetails.online}
+                </span>
               </div>
               <div className="1 flex pb-2 border-b-[1px] border-[#D9D9D9] justify-between items-center">
                 <div className="flex justify-start items-center gap-2">
                   <div className="circle w-3 h-3 bg-[#D9D9D9] rounded-full"></div>
                   <span className="text-[16px]">Offline</span>
                 </div>
-                <span className="text-[16px]">1440</span>
+                <span className="text-[16px]">
+                  {" "}
+                  {dashbaordData?.userDetails.offline}
+                </span>
               </div>
             </div>
             <div className="strenth flex  text-[16px] justify-between items-center">
-              <span>Total strenth</span> <span>12407</span>
+              <span>Total strenth</span>{" "}
+              <span> {dashbaordData?.userDetails.totalUsers}</span>
             </div>
           </div>
         </div>
@@ -309,7 +420,9 @@ function DashboardFile() {
       <div className="flex gap-3  w-full">
         <div className="graoh w-3/4 px-[40px]   py-[30px] rounded-[24px] bg-white">
           <div className="heading p-7 text-[24px]">Funds Credited</div>
-          <div className="grapgh">{/* <LinesScatterGraph/> */}</div>
+          <div className="grapgh">
+            <LinesScatterGraph />
+          </div>
         </div>
         {/* Listener comparison */}
 
@@ -317,8 +430,8 @@ function DashboardFile() {
           <div className="heading text-[20px]">Listener Comparison</div>
 
           <div className="grapgh my-10 w-full h-1/2 flex justify-center gap-12">
-            <VerticalMaleProgressbar progress={60} />
-            <VerticalFemaleProgressbar progress={40} />
+            <VerticalMaleProgressbar progress={malePercentage} />
+            <VerticalFemaleProgressbar progress={femalePercentage} />
           </div>
           <div className="bootom w-full flex flex-col gap-2">
             <div className="male flex justify-between items-center">
@@ -326,14 +439,14 @@ function DashboardFile() {
                 <div className="circle w-3 h-3 bg-black rounded-full"></div>
                 <span>Male</span>
               </div>
-              <div className="percentae">60%</div>
+              <div className="percentae">{malePercentage.toFixed(0)}%</div>
             </div>
             <div className="female flex justify-between items-center">
               <div className="flex justify-start items-center gap-3">
                 <div className="circle w-3 h-3 bg-[#808080] rounded-full"></div>
                 <span>Female</span>
               </div>
-              <div className="percentae">40%</div>
+              <div className="percentae">{femalePercentage.toFixed(0)}%</div>
             </div>
           </div>
         </div>
@@ -345,47 +458,35 @@ function DashboardFile() {
           <div className="bootom flex">
             <div className="left w-1/2 flex flex-col justify-center items-center">
               <div className="flex   items-center gap-2">
-                <span className="text-[40px] font-semibold">4.5</span>
+                <span className="text-[40px] font-semibold">
+                  {dashbaordData?.overallRating.rating}
+                </span>
                 <GoStarFill className="text-[40px]" />{" "}
               </div>
-              <span className="text-[18px] ">(1231)</span>
+              <span className="text-[18px] ">
+                ({dashbaordData?.overallRating.totalReviews})
+              </span>
             </div>
             <div className="right w-1/2 flex flex-col gap-[5px]">
-              <div className="1 flex justify-center items-center  gap-[12px]">
-                <span className="text-[18px]">1</span>
-                <div className="w-full gap-[12px] flex  justify-center items-center h-full">
-                  <GoStarFill className="text-[32px]" />{" "}
-                  <Progressbar progress={10} /> <span>10%</span>
-                </div>
-              </div>
-              <div className="1 flex justify-center items-center  gap-[12px]">
-                <span className="text-[18px]">2</span>
-                <div className="w-full gap-[12px] flex  justify-center items-center h-full">
-                  <GoStarFill className="text-[32px]" />{" "}
-                  <Progressbar progress={10} /> <span>10%</span>
-                </div>
-              </div>
-              <div className="1 flex justify-center items-center  gap-[12px]">
-                <span className="text-[18px]">3</span>
-                <div className="w-full gap-[12px] flex  justify-center items-center h-full">
-                  <GoStarFill className="text-[32px]" />{" "}
-                  <Progressbar progress={10} /> <span>10%</span>
-                </div>
-              </div>
-              <div className="1 flex justify-center items-center  gap-[12px]">
-                <span className="text-[18px]">4</span>
-                <div className="w-full gap-[12px] flex  justify-center items-center h-full">
-                  <GoStarFill className="text-[32px]" />{" "}
-                  <Progressbar progress={20} /> <span>0%</span>
-                </div>
-              </div>
-              <div className="1 flex justify-center items-center  gap-[12px]">
-                <span className="text-[18px]">5</span>
-                <div className="w-full gap-[12px] flex  justify-center items-center h-full">
-                  <GoStarFill className="text-[32px]" />{" "}
-                  <Progressbar progress={50} /> <span>50%</span>
-                </div>
-              </div>
+              {Object.keys(ratingBreakdown).map((rating) => {
+                const count = ratingBreakdown[rating];
+                const percentage =
+                  totalRatings > 0 ? (count / totalRatings) * 100 : 0;
+
+                return (
+                  <div
+                    key={rating}
+                    className="flex justify-center items-center gap-[12px]"
+                  >
+                    <span className="text-[18px]">{rating}</span>
+                    <div className="w-full gap-[12px] flex justify-center items-center h-full">
+                      <GoStarFill className="text-[32px]" />
+                      <Progressbar progress={percentage} />
+                      <span>{percentage.toFixed(0)}%</span>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -393,7 +494,7 @@ function DashboardFile() {
 
         <div className="Session Comparison flex justify-between items-center px-[40px]   py-[30px] rounded-[24px] bg-white w-[50%]">
           <div className="graph w-1/3">
-            <CircularGraph />
+            <CircularGraph listenerDetails={sessionComparison} />
           </div>
 
           <div className="text w-1/2">

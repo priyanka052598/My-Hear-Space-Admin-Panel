@@ -10,16 +10,32 @@ import {
   ChartJS.register(ArcElement, Tooltip, Legend);
   
 
-const CircularGraph = () => {
+const CircularGraph = ({ listenerDetails }) => {
+   let dataValues, labels;
+
+   if (
+     listenerDetails?.online !== undefined ||
+     listenerDetails?.offline !== undefined
+   ) {
+     // Listener Details
+     const { inSession, offline, online } = listenerDetails || {};
+     dataValues = [inSession , offline, online];
+     labels = ["In Session", "Offline", "Online"];
+   } else {
+     // Session Comparison
+     const { chat, phoneCall, videoCall } = listenerDetails || {};
+     dataValues = [phoneCall, videoCall, chat];
+     labels = ["Phone Call", "Video Call", "Chat"];
+   }
+
+
   const data = {
- 
     datasets: [
       {
         label: "My Dataset",
-        data: [300, 80, 30],
+        data: dataValues,
         backgroundColor: ["#000000", "#808080", "#D9D9D9"],
         borderWidth: 6, // Increases the gap between data segments
-
       },
     ],
   };

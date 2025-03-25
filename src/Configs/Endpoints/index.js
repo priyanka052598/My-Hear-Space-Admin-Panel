@@ -9,9 +9,16 @@ const API_ENDPOINTS = {
   getUsersTransactions: `${BASE_URL}wallet/user-transactions/`,
   getAllBlogs: `${BASE_URL}blogs/all`,
   createBlog: `${BASE_URL}blogs//create`,
-  getBlogDetails: `${BASE_URL}blogs/`,// blogId
-  updateBlog: `${BASE_URL}blogs/`,// blogId
-  deleteBlog: `${BASE_URL}blogs/`,// blogId method -delete
+  getBlogDetails: `${BASE_URL}blogs/`, // blogId
+  updateBlog: `${BASE_URL}blogs/`, // blogId
+  deleteBlog: `${BASE_URL}blogs/`, // blogId method -delete
+  getDasboard: `${BASE_URL}admins/dashboard`,
+  getWalletCredit: `${BASE_URL}admins/analytics/wallet-credits`,
+  getMonthlyCredit: `${BASE_URL}admins/analytics/monthly-credits`,
+  getListnerProfile: `${BASE_URL}admins/listener-profile/`, // + listnerID
+  UpdateListnerProfile: `${BASE_URL}admins/update-listener-profile/`, // + listnerID
+  approveListnerProfile: `${BASE_URL}admins/listeners/`, // + listnerID
+  getListnerSessionHistory: `${BASE_URL}admins/listener-session-history/`, // + listnerID
 };
 
 

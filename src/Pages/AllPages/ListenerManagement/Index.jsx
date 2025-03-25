@@ -55,15 +55,16 @@ const handleRowAction = (status, additionalParams) => {
     case "Pending":
     case "Created":
     case "Submitted":
+    case "Update":
       navigate("/ListenerManagement/CreatedListener", {
         state: { status, ...additionalParams },
       });
       break;
-    case "Update":
-      navigate("/ListenerManagement/UpdateListener", {
-        state: { status, ...additionalParams },
-      });
-      break;
+    // case "Update":
+    //   navigate("/ListenerManagement/UpdateListener", {
+    //     state: { status, ...additionalParams },
+    //   });
+    //   break;
     default:
       console.error("Unknown status:", status);
       break;
