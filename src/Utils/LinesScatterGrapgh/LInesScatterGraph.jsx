@@ -11,7 +11,15 @@ import {
 import { Line } from "react-chartjs-2";
 
 // Register required Chart.js components
-ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend);
+ChartJS.register(
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+  Legend,
+  ScatterController // Register ScatterController
+);
 
 function LinesScatterGraph({ monthlyData }) {
 console.log("monthlyData", monthlyData);
