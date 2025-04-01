@@ -7,6 +7,7 @@ import {
   CategoryScale,
   Tooltip,
   Legend,
+  ScatterController,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
