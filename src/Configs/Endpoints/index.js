@@ -19,6 +19,7 @@ const API_ENDPOINTS = {
   UpdateListnerProfile: `${BASE_URL}admins/update-listener-profile/`, // + listnerID
   approveListnerProfile: `${BASE_URL}admins/listeners/`, // + listnerID
   getListnerSessionHistory: `${BASE_URL}admins/listener-session-history/`, // + listnerID
+  getBanListners: `${BASE_URL}admins/ban-listeners`,
 };
 
 

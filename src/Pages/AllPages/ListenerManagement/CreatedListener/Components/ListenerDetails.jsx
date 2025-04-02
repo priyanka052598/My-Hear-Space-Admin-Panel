@@ -171,6 +171,7 @@ function ListenerDetails({ listner, status }) {
           availability: availability,
           gender: gender,
           address: address,
+          name: name,
         },
         {
           headers: {
