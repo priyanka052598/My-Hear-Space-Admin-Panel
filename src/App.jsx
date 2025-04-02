@@ -23,6 +23,7 @@ import BannerManagement from 'Pages/AllPages/BannerManagement/Index';
 import AddNewBlog from 'Pages/AllPages/BlogManagement/Componenets/AddNewBlog';
 import EditBlog from 'Pages/AllPages/BlogManagement/Componenets/EditBlog';
 import { ToastContainer } from 'react-toastify';
+import CouponManagement from 'Pages/AllPages/CouponManagement/Index';
 
 
 
@@ -58,6 +59,7 @@ function App() {
             <Route path='/BannerManagement' element={<BannerManagement/>}/>
             <Route path='/BlogManagement/AddNewBlog' element={<AddNewBlog/>}/>
             <Route path='/BlogManagement/EditBlog' element={<EditBlog/>}/>
+            <Route path="/CouponManagement" element={<CouponManagement/>}/>
         </Routes>
 
     </Router>

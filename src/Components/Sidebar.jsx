@@ -10,6 +10,8 @@ import { FaRegStar } from "react-icons/fa6";
 import { LuFilePen } from "react-icons/lu";
 import { FiPhoneMissed } from "react-icons/fi";
 import { RiImageEditFill } from "react-icons/ri";
+import { BiSolidDiscount } from "react-icons/bi";
+
 
 import { TbLogout2 } from "react-icons/tb";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -31,6 +33,7 @@ function Sidebar() {
    const isBlogManagement=location.pathname==="/BlogManagement"||location.pathname==="/BlogManagement/AddNewBlog"||location.pathname=== "/BlogManagement/EditBlog"
    const isSessionRejected=location.pathname==="/SessionRejected"
    const isBannerManagement=location.pathname==="/BannerManagement"
+   const isCouponManagement=location.pathname==="/CouponManagement"
 
   return (
     <div className='w-[23%] pb-16   bg-[#151515] h-screen scrollbar-none overflow-y-auto'>
@@ -67,6 +70,9 @@ function Sidebar() {
 </Link>
 <Link to="/BannerManagement" className={` pl-[20px] py-[16px] ${isBannerManagement? "bg-[#3A3A3A] text-white border-l-[3px] border-white": "text-[#808080]"}  text-[#808080] gap-[14px] flex justify-start items-center `}>
           <RiImageEditFill className='text-[24px]'/> <span className='text-[16px]'>Banner Management</span>
+</Link>
+<Link to="/CouponManagement" className={` pl-[20px] py-[16px] ${isCouponManagement? "bg-[#3A3A3A] text-white border-l-[3px] border-white": "text-[#808080]"}  text-[#808080] gap-[14px] flex justify-start items-center `}>
+          <BiSolidDiscount className='text-[24px]'/> <span className='text-[16px]'>Coupon Management</span>
 </Link>
       </div>
       <div className=" pl-[20px] pt-16 py-[16px]  text-[#808080] gap-[14px] flex justify-start items-center ">
