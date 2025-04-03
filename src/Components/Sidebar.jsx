@@ -56,9 +56,7 @@ function Sidebar() {
 <Link to="/User&WalletDetails" className={` pl-[20px] py-[16px]  ${isWalletManagement?  "bg-[#3A3A3A] text-white border-l-[3px] border-white": "text-[#808080]"} text-[#808080] gap-[14px] flex justify-start items-center `}>
           <FiUsers className='text-[24px]'/> <span className='text-[16px]'>User & Wallet Details</span>
 </Link>
-<div className=" pl-[20px] py-[16px]  text-[#808080] gap-[14px] flex justify-start items-center ">
-          <FiFileText className='text-[24px]'/> <span className='text-[16px]'>Report Generation</span>
-</div>
+
 <Link to="/UserFeedback" className={` pl-[20px] py-[16px] ${isUserFeedback ?"bg-[#3A3A3A] text-white border-l-[3px] border-white": "text-[#808080]" } text-[#808080] gap-[14px] flex justify-start items-center `}>
           <FaRegStar className='text-[24px]'/> <span className='text-[16px]'>User Feedbacks</span>
 </Link>

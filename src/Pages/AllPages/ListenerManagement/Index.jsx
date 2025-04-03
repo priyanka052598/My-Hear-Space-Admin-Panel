@@ -25,7 +25,7 @@ function ListenerManagementTable() {
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 9; // Number of rows per page
+  const itemsPerPage = 10; // Number of rows per page
 
   // Calculate the indices for slicing the table data
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -84,13 +84,13 @@ const handleRowAction = (status, additionalParams) => {
   
       const response = await axios.get(`${serverUrl}admins/listeners`, {
         headers: {
-          Authorization: `Bearer ${token}` // Include the token in the request
+          Authorization: `Bearer ${token}`, // Include the token in the request
         },
         params: {
           search: searchValue,
-          status: sortByStatusFilter !== "All" ? sortByStatusFilter : "",
-          rating: sortByRatingFilter
-        }
+          status: sortByStatusFilter !== "All" ? sortByStatusFilter : "All",
+          rating: sortByRatingFilter,
+        },
       });
   
       setListenersData(response.data.data); // Ensure you're accessing response.data
@@ -102,7 +102,7 @@ const handleRowAction = (status, additionalParams) => {
   
   useEffect(() => {
     getListeners();
-  }, [searchValue, sortByStatusFilter, sortByRatingFilter]);
+  }, [searchValue, sortByStatusFilter, sortByRatingFilter, currentPage]);
   
   return (
     <div className='flex h-screen bg-[#F0F0F0]'>
@@ -174,6 +174,7 @@ const handleRowAction = (status, additionalParams) => {
             <tr>
               <th className="p-3">Name</th>
               <th className="p-3">Phone Number</th>
+              <th className="p-3">Email</th>
               <th className="p-3">Rating</th>
               <th className="p-3">Experience</th>
               <th className="p-3">Wallet (₹)</th>
@@ -193,6 +194,7 @@ const handleRowAction = (status, additionalParams) => {
               >
                 <td className="p-3">{item.name}</td>
                 <td className="p-3">{item.phone}</td>
+                <td className="p-3">{item.email}</td>
                 <td className="p-3 flex justify-start items-center gap-1">{item.overallRating} <GoStarFill/></td>
                 <td className="p-3">{item.experience} Hrs</td>
                 <td className="p-3">{item.walletBalance}</td>

@@ -1,24 +1,4 @@
-// import React from 'react'
-// import PaymentManagementTable from './Componenets/PaymentManagementTable'
-// import Sidebar from 'Components/Sidebar'
-// import Adminheader from 'Components/Adminheader'
 
-// function PaymentManagement() {
-//   return (
-//     <div>
-//         <div className='flex bg-[#F0F0F0]'>
-//         <Sidebar/>
-//         <div className="rght w-full auto flex flex-col">
-//         <Adminheader />
-//         <PaymentManagementTable/>
-//         </div>
-       
-//     </div>
-//     </div>
-//   )
-// }
-
-// export default PaymentManagement
 
 
 
@@ -34,6 +14,7 @@ import Adminheader from 'Components/Adminheader';
 import { PiExportBold } from "react-icons/pi";
 import axios from 'axios';
 import API_ENDPOINTS from 'Configs/Endpoints';
+import * as XLSX from "xlsx";
 
 
 
@@ -44,6 +25,8 @@ import API_ENDPOINTS from 'Configs/Endpoints';
 function PaymentManagement() {
   const navigate = useNavigate();
 const [listnerData, setListnerData] = useState([])
+const [status, setStatus] = useState("All")
+const [search, setSearch] = useState("")
 
   
  
@@ -68,7 +51,27 @@ const [listnerData, setListnerData] = useState([])
   const handleNext = () => {
     if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
   };
+console.log("search", search);
 
+ const exportToExcel = () => {
+   // Prepare the data for export
+   const exportData = listnerData.map((item) => ({
+     Date: item.timestamp.slice(0, 10),
+     "Listener Name": item.listenerName,
+     "Requested Amount (₹)": item.requestedAmount,
+     Status: item.status,
+   }));
+
+   // Create a new workbook
+   const wb = XLSX.utils.book_new();
+   const ws = XLSX.utils.json_to_sheet(exportData);
+
+   // Add the worksheet to the workbook
+   XLSX.utils.book_append_sheet(wb, ws, "PaymentData");
+
+   // Generate the Excel file and trigger download
+   XLSX.writeFile(wb, "Payment_Management_Data.xlsx");
+ };
 
 const getListeners = async () => {
   try {
@@ -80,11 +83,18 @@ const getListeners = async () => {
       return;
     }
 
-    const response = await axios.get(`${API_ENDPOINTS.GetListnerPaymentRequests}`, {
-      headers: {
-        Authorization: `Bearer ${token}`, // Include the token in the request
-      },
-    });
+    const response = await axios.get(
+      `${API_ENDPOINTS.GetListnerPaymentRequests}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the request
+        },
+        params: {
+          search: search,
+          status: status,
+        },
+      }
+    );
 setListnerData(response.data)
     response.data.data.length > 0 && console.log(response.data.data);
   } catch (error) {
@@ -93,9 +103,8 @@ setListnerData(response.data)
 };
 
 useEffect(() => {
-  getListeners()
-
-}, [])
+  getListeners();
+}, [status,search]);
 
 console.log("listnerData", listnerData);
 
@@ -136,15 +145,22 @@ console.log("listnerData", listnerData);
                 <div className="listener text-[16px]">Payment Management</div>
               </div>
             </div>
-            <Link className="right cursor-pointer flex self-center  text-white rounded-[8px] items-center bg-[#3A3A3A] px-5 py-3 gap-2 w-fit">
+            <div
+              onClick={exportToExcel}
+              className="right cursor-pointer flex self-center  text-white rounded-[8px] items-center bg-[#3A3A3A] px-5 py-3 gap-2 w-fit"
+            >
               <PiExportBold className="text-[20px]" /> Export
-            </Link>
+            </div>
           </div>
           {/* inputs */}
           <div className="w-full flex justify-between gap-20 items-center my-4 ">
             <div className="search w-1/3 flex justify-start items-center bg-white rounded-3xl ">
               <CiSearch size={"27px"} className=" text-[#808080]  mx-[13px] " />
               <input
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
                 className="w-full mr-3 py-2 rounded-3xl bg-transparent outline-none "
                 placeholder="Search by Listener Name.."
                 type="text"
@@ -154,6 +170,10 @@ console.log("listnerData", listnerData);
               <span className="text-[16px] ">Sort by Status</span>
               <div className=" py-2 px-3 bg-white rounded-[8px] border-[1px] border-[#808080]">
                 <select
+                  value={status}
+                  onChange={(e) => {
+                    setStatus(e.target.value);
+                  }}
                   className="pr-12 border-white outline-none"
                   name=""
                   id=""
