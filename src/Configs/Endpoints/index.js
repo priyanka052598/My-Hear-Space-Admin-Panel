@@ -20,6 +20,7 @@ const API_ENDPOINTS = {
   approveListnerProfile: `${BASE_URL}admins/listeners/`, // + listnerID
   getListnerSessionHistory: `${BASE_URL}admins/listener-session-history/`, // + listnerID
   getBanListners: `${BASE_URL}admins/ban-listeners`,
+  getDeclinedSessions: `${BASE_URL}admins/listeners/`, // + listnerID /rejections
 };
 
 
