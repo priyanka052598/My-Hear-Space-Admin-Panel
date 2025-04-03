@@ -5,33 +5,38 @@ import axios from 'axios';
 import API_ENDPOINTS from 'Configs/Endpoints';
 import React, { useEffect, useState } from 'react';
 import { FaPhoneSlash } from "react-icons/fa6";
+import { IoClose } from 'react-icons/io5';
 
 
 function DeclinedSession({ listner }) {
   const [data, setData] = useState()
-  let TableData = [
-    {
-      number: 1,
-      date: "15/12/24",
-      type: "Video",
-      reason: "Network Issues",
-      more: "I am currently facing network issues in my area due to bad weather conditions.",
-    },
-    {
-      number: 2,
-      date: "15/12/24",
-      type: "Video",
-      reason: "Network Issues",
-      more: "I am currently facing network issues in my area due to bad weather ck issues in my area due to bad weather conditions.",
-    },
-    {
-      number: 3,
-      date: "15/12/24",
-      type: "Video",
-      reason: "Network Issues",
-      more: "I am currently facing network issues in my area due to bad weather ck issues in my area due to bad weather conditions.",
-    },
-  ];
+  const [showModal, setShowModal] = useState(false); // Modal state
+  const [banPeriod, setBanPeriod] = useState("7 Days"); // Default selected period
+
+
+  // let TableData = [
+  //   {
+  //     number: 1,
+  //     date: "15/12/24",
+  //     type: "Video",
+  //     reason: "Network Issues",
+  //     more: "I am currently facing network issues in my area due to bad weather conditions.",
+  //   },
+  //   {
+  //     number: 2,
+  //     date: "15/12/24",
+  //     type: "Video",
+  //     reason: "Network Issues",
+  //     more: "I am currently facing network issues in my area due to bad weather ck issues in my area due to bad weather conditions.",
+  //   },
+  //   {
+  //     number: 3,
+  //     date: "15/12/24",
+  //     type: "Video",
+  //     reason: "Network Issues",
+  //     more: "I am currently facing network issues in my area due to bad weather ck issues in my area due to bad weather conditions.",
+  //   },
+  // ];
 
   const getListenerDeclined = async () => {
     try {
@@ -61,6 +66,12 @@ setData(response.data)
   useEffect(() => {
       getListenerDeclined();
     }, []);
+
+    const handleBan = async () => {
+      console.log("Ban Listener for:", banPeriod);
+      // API call to ban listener
+      setShowModal(false);
+    };
 
   return (
     <>
@@ -135,10 +146,119 @@ setData(response.data)
         <button
           className="text-[18px] flex self-end right-0 text-white mr-7 px-6 py-2 bg-[#3A3A3A] rounded-[8px]"
           type="button"
+          onClick={() => setShowModal(true)}
+
         >
           Deactivate Listener
         </button>
       </div>
+
+        {/* Modal */}
+        {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-2xl w-[400px] p-6 relative">
+            <button
+              className="absolute top-3 right-3 text-xl"
+              onClick={() => setShowModal(false)}
+            >
+              <IoClose />
+            </button>
+            <h2 className="text-[18px] font-semibold mb-1">Ban Period</h2>
+            
+            {/* Radio Buttons */}
+            <div className="flex flex-col gap-1 items-start mb-6">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="banPeriod"
+                  value="7 Days"
+                  checked={banPeriod === "7 Days"}
+                  onChange={(e) => setBanPeriod(e.target.value)}
+                  className="accent-black text-[10px]"
+
+                />
+              Ban for 1 day
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="banPeriod"
+                  value="7 Days"
+                  checked={banPeriod === "7 Days"}
+                  onChange={(e) => setBanPeriod(e.target.value)}
+                  className="accent-black text-[10px]"
+
+                />
+              Ban for 3 days
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="banPeriod"
+                  value="7 Days"
+                  checked={banPeriod === "7 Days"}
+                  onChange={(e) => setBanPeriod(e.target.value)}
+                  className="accent-black text-[10px]"
+
+                />
+              Ban for 7 days
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="banPeriod"
+                  value="7 Days"
+                  checked={banPeriod === "7 Days"}
+                  onChange={(e) => setBanPeriod(e.target.value)}
+                  className="accent-black text-[10px]"
+
+                />
+              Ban for 15 days
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="banPeriod"
+                  value="7 Days"
+                  checked={banPeriod === "7 Days"}
+                  onChange={(e) => setBanPeriod(e.target.value)}
+                  className="accent-black text-[10px]"
+                />
+              Ban for 30 days
+              </label>
+           
+          
+              <label className="flex items-center gap-2 cursor-pointer ">
+                <input
+                  type="radio"
+                  name="banPeriod"
+                  value="Permanent"
+                  checked={banPeriod === "Permanent"}
+                  onChange={(e) => setBanPeriod(e.target.value)}
+                  className="accent-black text-[10px]"
+                />
+                Permanent
+              </label>
+            </div>
+        
+            <div className='my-[40px]'>
+              <p className='text-[18px] font-medium'>Message</p>
+              <input placeholder='Message for listener' className='border-[1px] pl-2 w-full border-[#808080] outline-none rounded-[4px]' type="text" name="" id="" />
+            </div>
+        
+            <button
+              className="w-full bg-[#525151] text-white py-2 rounded-lg hover:bg-[#3A3A3A]"
+              onClick={() => {
+                // Handle Ban action here
+                console.log("Ban listener logic here");
+                setShowModal(false);
+              }}
+            >
+              Ban Listener
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

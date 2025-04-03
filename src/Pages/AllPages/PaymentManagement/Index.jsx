@@ -54,6 +54,9 @@ const [search, setSearch] = useState("")
 console.log("search", search);
 
  const exportToExcel = () => {
+  if (listnerData?.length==0) {
+    return
+  }
    // Prepare the data for export
    const exportData = listnerData.map((item) => ({
      Date: item.timestamp.slice(0, 10),

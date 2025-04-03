@@ -17,8 +17,9 @@ function CreatedListener() {
     const  location=useLocation();
     const from =location.state?.from;
     const listner = location.state
-    const status = location.state?.status
-    console.log(location.state, "from");
+    const status = location.state.profileStatus
+    console.log(location.state.profileStatus, "from");
+    console.log(status,"status")
 
     
    

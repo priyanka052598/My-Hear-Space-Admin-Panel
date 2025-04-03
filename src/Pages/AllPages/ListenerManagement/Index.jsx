@@ -23,6 +23,7 @@ function ListenerManagementTable() {
   const [sortByRatingFilter, setSortByRatingFilter] = useState("")
   const [searchValue, setSearchValue] = useState("")
 
+
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10; // Number of rows per page
@@ -209,6 +210,7 @@ const handleRowAction = (status, additionalParams) => {
                           : ""
                   }`}>{item.profileStatus}</td>
                 <td className="p  w-fit"> <div onClick={()=>{
+                  console.log(item.profileStatus)
                   handleRowAction(item.profileStatus, item);
                 }} className='border-[1px] cursor-pointer rounded-[6px] px-4 py-1 border-black w-fit'><IoArrowForward className='text-[18px] font-normal' /></div></td>
               </tr>
@@ -244,6 +246,16 @@ const handleRowAction = (status, additionalParams) => {
           </button>
         </div>
       </div>
+
+      {/* {showRejectListenerPopup && (
+         <div>
+
+
+
+        </div>)} */}
+
+
+
 
 
     </div>

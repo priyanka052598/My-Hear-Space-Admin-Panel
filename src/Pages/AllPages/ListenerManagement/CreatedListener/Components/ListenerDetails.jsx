@@ -4,6 +4,7 @@ import axios from "axios";
 import SucessfullPopup from "Components/SucessfullPopup";
 import API_ENDPOINTS from "Configs/Endpoints";
 import React, { useEffect, useRef, useState } from "react";
+import { IoClose } from "react-icons/io5";
 
 function ListenerDetails({ listner, status }) {
   // State to track if we're in edit mode
@@ -12,6 +13,8 @@ function ListenerDetails({ listner, status }) {
   // State for storing original values before editing
   const [originalData, setOriginalData] = useState(null);
   const [listnerData, setListnerData] = useState();
+    const [showRejectListenerPopup, setShowRejectListenerPopup] = useState("")
+    const [showCorrectionRequiredPopup, setShowCorrectionRequiredPopup] = useState("")
 
   // Form field states
   const [gender, setGender] = useState("Male");
@@ -22,6 +25,8 @@ function ListenerDetails({ listner, status }) {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
        const[showPopup,setShowPopup]=useState(false)
+       const[showRejectPopup,setShowRejectPopup]=useState(false)
+       const [showCorrectionApprovePopup, setShowCorrectionApprovePopup] = useState(false)
   
   const [availability, setAvailability] = useState({
     chat: false,
@@ -435,6 +440,24 @@ function ListenerDetails({ listner, status }) {
       {/* Button */}
 
       <div className="bg-white flex justify-end border-t-[1px] py-3 border-[#808080]">
+      {
+          listner?.profileStatus=="Pending" && !isEditing && <div> 
+             <button
+            className="text-[18px]  text-black mr-7 px-6 py-2  border-black border-[1px] rounded-[8px]"
+            type="button"
+            onClick={()=>{setShowCorrectionRequiredPopup(true)}}
+          >
+          Correction Required
+          </button>
+              <button
+            className="text-[18px] text-white mr-7 px-6 py-2 bg-[#FF5D5D]  border-[1px] rounded-[8px]"
+            type="button"
+            onClick={()=>{setShowRejectListenerPopup(true)}}
+          >
+           Reject Listener
+          </button>
+          </div>
+        }
         {isEditing ? (
           <>
             <button
@@ -461,16 +484,101 @@ function ListenerDetails({ listner, status }) {
             Edit Details
           </button>
         )}
-        <button
-          className="text-[18px] text-white mr-7 px-6 py-2 bg-[#3A3A3A] rounded-[8px]"
+      {!isEditing &&     <button
+          className="text-[18px] text-white mr-7 px-6 py-2 bg-[#0D894F] rounded-[8px]"
           type="button"
           onClick={ApproveListner}
         >
           Approve Listener
-        </button>
+        </button> }
+    
         {showPopup && (
           <SucessfullPopup
-            text={"Upload Successfully!"}
+            text={"Listener’s Profile has been Approved!"}
+            setShowPopup={setShowPopup}
+          />
+        )}
+        {/* ShowCorrectionRequiredPopup Modal */}
+        {showCorrectionRequiredPopup && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-white rounded-2xl w-[400px] p-6 relative">
+                  <button
+                    className="absolute top-3 right-3 text-xl"
+                    onClick={() => setShowCorrectionRequiredPopup(false)}
+                  >
+                    <IoClose />
+                  </button>
+                  <h2 className="text-[20px] font-semibold text-center  mb-1"> Correction Required </h2>
+                  
+                
+              
+                  <div className='my-[20px]'>
+                    <p className='text-[16px] font-medium'>Remarks</p>
+                    <textarea
+    placeholder="Message for listener"
+    className="border-[1px] pl-2 w-full border-[#808080] outline-none rounded-[4px] h-[140px] resize-none"
+  />                  </div>
+              
+                  <button
+                    className="w-full bg-[#525151] text-white py-2 rounded-lg hover:bg-[#3A3A3A]"
+                    onClick={() => {
+                      // Handle Ban action here
+                      console.log("Ban listener logic here");
+                      setShowCorrectionRequiredPopup(false)
+                      setShowCorrectionApprovePopup(true)
+                    
+                    }}
+                  >
+                     Submit
+                  </button>
+                </div>
+              </div>
+            )}
+            {/* Coorection Approve popup */}
+            {showCorrectionApprovePopup && (
+              <SucessfullPopup
+              text={"Remarks submitted successfully!"}
+              setShowPopup={setShowPopup}/>
+             
+            )}
+       {/* RejectListenerPopup Modal */}
+              {showRejectListenerPopup && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                <div className="bg-white rounded-2xl w-[400px] p-6 relative">
+                  <button
+                    className="absolute top-3 right-3 text-xl"
+                    onClick={() => setShowRejectListenerPopup(false)}
+                  >
+                    <IoClose />
+                  </button>
+                  <h2 className="text-[20px] font-semibold text-center  mb-1">Reject Listener </h2>
+                  
+                
+              
+                  <div className='my-[20px]'>
+                    <p className='text-[16px] font-medium'>Reason</p>
+                    <textarea
+    placeholder="Message for listener"
+    className="border-[1px] pl-2 w-full border-[#808080] outline-none rounded-[4px] h-[140px] resize-none"
+  />                  </div>
+              
+                  <button
+                    className="w-full bg-[#525151] text-white py-2 rounded-lg hover:bg-[#3A3A3A]"
+                    onClick={() => {
+                      setShowRejectListenerPopup(false)
+                      setShowRejectPopup(true)
+                    
+                    }}
+                  >
+                     Reject Listener
+                  </button>
+                </div>
+              </div>
+            )}
+            {/* Reject-popup */}
+               {showRejectPopup && (
+          <SucessfullPopup
+            text={"Listener’s has been Rejected."}
             setShowPopup={setShowPopup}
           />
         )}

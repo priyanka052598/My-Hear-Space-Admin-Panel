@@ -124,13 +124,19 @@ function AddNewListener() {
                                     <div className="playstore">
                                         <span className="text-[18px]">Play Store Link</span>
                                         <div className="border-[1px] mt-2 border-[#808080] px-4 py-2 rounded-[8px]">
-                                            https://play.google.com/store/apps/details?id=com.bigwinepot.nwdn.internationalk
+                                            https://play.google.com
+                                            /store/apps/details?id
+                                            =com.bigwinepot.nwdn.
+                                            internationalk
                                         </div>
                                     </div>
                                     <div className="appstore mt-10">
                                         <span className="text-[18px]">Apple Store Link</span>
-                                        <div className="border-[1px] mt-2 border-[#808080] px-4 py-2 rounded-[8px]">
-                                            https://apps.apple.com/store/apps/details?id=com.bigwinepot.nwdn.internationalk
+                                        <div className="border-[1px]  mt-2 border-[#808080] px-4 py-2 rounded-[8px]">
+                                            https://apps.apple.com
+                                            /store/apps/details?id=com.
+                                            bigwinepot.nwdn.
+                                            internationalk
                                         </div>
                                     </div>
                                 </div>
