@@ -102,10 +102,12 @@ let ratingBreakdown = dashbaordData?.overallRating?.ratingBreakdown || {};
      (a, b) => a + b,
      0
    );
-let sessionComparison = dashbaordData?.sessionComparison
-     const { chat, phoneCall, videoCall } = sessionComparison || {};
 
-console.log("dashbaordData?.userDetails,", dashbaordData?.userDetails);
+let sessionComparison = dashbaordData?.sessionComparison
+ const { chat, phoneCall, videoCall } = sessionComparison || {};
+
+console.log("dashbaordData?.userDetails,", sessionComparison);
+
   return (
     <div className="w-full overflow-y-auto h-screen  scrollbar-none  p-7 ">
       {/* OVerview Portion */}
@@ -152,7 +154,7 @@ console.log("dashbaordData?.userDetails,", dashbaordData?.userDetails);
               <LuIndianRupee className="text-[28px]" />
             </div>
             <span className="text-[32px]">
-              {dashbaordData?.overview.totalCredited}
+              {Math.round(dashbaordData?.overview.totalCredited)}
             </span>
             <span className="text-[16px] text-[#808080]">Total Credited </span>
           </div>
@@ -161,7 +163,6 @@ console.log("dashbaordData?.userDetails,", dashbaordData?.userDetails);
               <FaPhone className="text-[28px]" />
             </div>
             <span className="text-[32px]">
-              {" "}
               {dashbaordData?.overview.totalSessions}
             </span>
             <span className="text-[16px] text-[#808080]">Total Sessions</span>
@@ -176,7 +177,7 @@ console.log("dashbaordData?.userDetails,", dashbaordData?.userDetails);
         <div className="boxes flex gap-3 w-full">
           <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
             <span className="text-[24px] text-black mb-2 font-medium">
-              ₹ {dashbaordData?.paymentOverview.successfulPayments}
+              ₹ {Math.round(dashbaordData?.paymentOverview.successfulPayments)}
             </span>
             <span className=" text-[16px] text-[#808080] text-center">
               Successful Payments to Listener
@@ -184,7 +185,7 @@ console.log("dashbaordData?.userDetails,", dashbaordData?.userDetails);
           </div>
           <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
             <span className="text-[24px] text-black mb-2 font-medium">
-              ₹{dashbaordData?.paymentOverview.pendingPayments}
+              ₹{Math.round(dashbaordData?.paymentOverview.pendingPayments)}
             </span>
             <span className=" text-[16px] text-[#808080] text-center">
               Pending Payments to Listener
@@ -192,7 +193,8 @@ console.log("dashbaordData?.userDetails,", dashbaordData?.userDetails);
           </div>
           <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
             <span className="text-[24px] text-black mb-2 font-medium">
-              ₹{dashbaordData?.paymentOverview.listenerWalletBalance}
+              ₹
+              {Math.round(dashbaordData?.paymentOverview.listenerWalletBalance)}
             </span>
             <span className=" text-[16px] text-[#808080] text-center">
               Listener’s wallet balance
@@ -200,7 +202,7 @@ console.log("dashbaordData?.userDetails,", dashbaordData?.userDetails);
           </div>
           <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
             <span className="text-[24px] text-black mb-2 font-medium">
-              ₹{dashbaordData?.paymentOverview.userWalletBalance}
+              ₹{Math.round(dashbaordData?.paymentOverview.userWalletBalance)}
             </span>
             <span className=" text-[16px] text-[#808080] text-center">
               User’s wallet balance
@@ -208,7 +210,7 @@ console.log("dashbaordData?.userDetails,", dashbaordData?.userDetails);
           </div>
           <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
             <span className="text-[24px] text-black mb-2 font-medium">
-              ₹{dashbaordData?.paymentOverview.totalAmountCredited}
+              ₹{Math.round(dashbaordData?.paymentOverview.totalAmountCredited)}
             </span>
             <span className=" text-[16px] text-[#808080] text-center">
               Total Amount Credited
@@ -394,7 +396,6 @@ console.log("dashbaordData?.userDetails,", dashbaordData?.userDetails);
                   <span className="text-[16px]"> Online</span>
                 </div>
                 <span className="text-[16px]">
-                  {" "}
                   {dashbaordData?.userDetails.online}
                 </span>
               </div>
@@ -424,6 +425,7 @@ console.log("dashbaordData?.userDetails,", dashbaordData?.userDetails);
             <LinesScatterGraph />
           </div>
         </div>
+
         {/* Listener comparison */}
 
         <div className=" flex flex-col justify-center items-center w-1/4 px-[40px]   py-[30px] rounded-[24px] bg-white">
@@ -507,21 +509,25 @@ console.log("dashbaordData?.userDetails,", dashbaordData?.userDetails);
                   <div className="circle w-3 h-3 bg-black rounded-full"></div>
                   <span className="text-[16px]">Phone Call</span>
                 </div>
-                <span className="text-[16px]">550%</span>
+                <span className="text-[16px]">
+                  {sessionComparison?.phoneCall}
+                </span>
               </div>
               <div className="1 flex justify-between items-center">
                 <div className="flex justify-start items-center gap-2">
                   <div className="circle w-3 h-3 bg-[#808080] rounded-full"></div>
                   <span className="text-[16px]"> Video call</span>
                 </div>
-                <span className="text-[16px]">25%</span>
+                <span className="text-[16px]">
+                  {sessionComparison?.videoCall}
+                </span>
               </div>
               <div className="1 flex  justify-between items-center">
                 <div className="flex justify-start items-center gap-2">
                   <div className="circle w-3 h-3 bg-[#D9D9D9] rounded-full"></div>
                   <span className="text-[16px]">Chat</span>
                 </div>
-                <span className="text-[16px]">15%</span>
+                <span className="text-[16px]"> {sessionComparison?.chat}</span>
               </div>
             </div>
           </div>

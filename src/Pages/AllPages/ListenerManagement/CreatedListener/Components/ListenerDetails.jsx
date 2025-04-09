@@ -27,6 +27,8 @@ function ListenerDetails({ listner, status }) {
        const[showPopup,setShowPopup]=useState(false)
        const[showRejectPopup,setShowRejectPopup]=useState(false)
        const [showCorrectionApprovePopup, setShowCorrectionApprovePopup] = useState(false)
+       const [rejectReason, setRejectReason] = useState("")
+       const [correctionReason, setCorrectionReason] = useState("")
   
   const [availability, setAvailability] = useState({
     chat: false,
@@ -210,6 +212,64 @@ function ListenerDetails({ listner, status }) {
         }
       );
       setShowPopup(true)
+      getListener();
+    } catch (error) {
+      console.error("Error fetching listeners:", error);
+    }
+  };
+  const RejectListner = async () => {
+    try {
+      const token = localStorage.getItem("authToken"); // Retrieve and parse user data
+      // const token = user?.token; // Extract the token
+
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
+      const response = await axios.put(
+        `${API_ENDPOINTS.approveListnerProfile}${listner._id}/profile/review`,
+        {
+          action:"reject",
+          reason:rejectReason
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the request
+          },
+        }
+      );
+     setShowRejectListenerPopup(false);
+     setShowRejectPopup(true);
+      getListener();
+    } catch (error) {
+      console.error("Error fetching listeners:", error);
+    }
+  };
+  const CorrectionRequiredListner = async () => {
+    try {
+      const token = localStorage.getItem("authToken"); // Retrieve and parse user data
+      // const token = user?.token; // Extract the token
+
+      if (!token) {
+        console.error("No token found");
+        return;
+      }
+
+      const response = await axios.put(
+        `${API_ENDPOINTS.approveListnerProfile}${listner._id}/profile/review`,
+        {
+          action: "correction",
+          reason:correctionReason
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the request
+          },
+        }
+      );
+     setShowCorrectionRequiredPopup(false);
+     setShowCorrectionApprovePopup(true);
       getListener();
     } catch (error) {
       console.error("Error fetching listeners:", error);
@@ -515,19 +575,17 @@ function ListenerDetails({ listner, status }) {
                   <div className='my-[20px]'>
                     <p className='text-[16px] font-medium'>Remarks</p>
                     <textarea
+                    value={correctionReason}
+                    onChange={(e)=>{
+                      setCorrectionReason(e.target.value)
+                    }}
     placeholder="Message for listener"
     className="border-[1px] pl-2 w-full border-[#808080] outline-none rounded-[4px] h-[140px] resize-none"
   />                  </div>
               
                   <button
                     className="w-full bg-[#525151] text-white py-2 rounded-lg hover:bg-[#3A3A3A]"
-                    onClick={() => {
-                      // Handle Ban action here
-                      console.log("Ban listener logic here");
-                      setShowCorrectionRequiredPopup(false)
-                      setShowCorrectionApprovePopup(true)
-                    
-                    }}
+                    onClick={CorrectionRequiredListner}
                   >
                      Submit
                   </button>
@@ -558,17 +616,17 @@ function ListenerDetails({ listner, status }) {
                   <div className='my-[20px]'>
                     <p className='text-[16px] font-medium'>Reason</p>
                     <textarea
+                    value={rejectReason}
+                    onChange={(e)=>{
+                      setRejectReason(e.target.value)
+                    }}
     placeholder="Message for listener"
     className="border-[1px] pl-2 w-full border-[#808080] outline-none rounded-[4px] h-[140px] resize-none"
   />                  </div>
               
                   <button
                     className="w-full bg-[#525151] text-white py-2 rounded-lg hover:bg-[#3A3A3A]"
-                    onClick={() => {
-                      setShowRejectListenerPopup(false)
-                      setShowRejectPopup(true)
-                    
-                    }}
+                    onClick={RejectListner}
                   >
                      Reject Listener
                   </button>

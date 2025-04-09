@@ -21,6 +21,13 @@ const API_ENDPOINTS = {
   getListnerSessionHistory: `${BASE_URL}admins/listener-session-history/`, // + listnerID
   getBanListners: `${BASE_URL}admins/ban-listeners`,
   getDeclinedSessions: `${BASE_URL}admins/listeners/`, // + listnerID /rejections
+  banListener: `${BASE_URL}admins/ban/`, // + listnerID
+  createCoupon: `${BASE_URL}admins/wallet-coupon/create`,
+  getAllCoupons: `${BASE_URL}admins/wallet-coupon/all`,
+  deleteCoupon: `${BASE_URL}admins/wallet-coupon`, // + couponId
+  updateCoupon: `${BASE_URL}admins/wallet-coupon`, // + couponId
+  
+  // listenerBan: `${BASE_URL}admins/listeners/`, // + listnerID
 };
 
 

@@ -8,45 +8,19 @@ import { IoIosArrowForward } from 'react-icons/io'
 import { IoArrowBack, IoArrowForward } from 'react-icons/io5'
 import { PiExportBold } from 'react-icons/pi'
 import { Link, useNavigate } from 'react-router-dom'
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
+
 
 function SessionRejected() {
-  const [activeTab, setActiveTab] = useState("User Details")
-  let tabs = ["User Details", "Transaction Details", "Analytics"]
-  const [banData, setBanData] = useState([])
+const[banData, setBanData] = useState([]);
+const [filteredData, setFilteredData] = useState([]);
+const [searchValue, setSearchValue] = useState("");
 
 
   const navigate = useNavigate();
 
-  // admins / ban - listeners;
 
-  const getBanListener = async () => {
-    try {
-      const token = localStorage.getItem("authToken"); // Retrieve and parse user data
-      // const token = user?.token; // Extract the token
-
-      if (!token) {
-        console.error("No token found");
-        return;
-      }
-
-      const response = await axios.get(`${API_ENDPOINTS.getBanListners}`, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Include the token in the request
-        },
-      });
-setBanData(response.data)
-
-      console.log("esponse.data.data.email", response.data);
-    } catch (error) {
-      console.error("Error fetching listeners:", error);
-    }
-  };
-
-  useEffect(() => {
-    getBanListener();
-  }, []);
-
-console.log("banData", banData);
+ 
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,7 +29,7 @@ console.log("banData", banData);
   // Calculate the indices for slicing the table data
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = banData?.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = banData?.length > 0 && banData?.slice(indexOfFirstItem, indexOfLastItem)||[];
 
   // Total number of pages
   const totalPages = Math.ceil(banData?.length / itemsPerPage);
@@ -70,7 +44,37 @@ console.log("banData", banData);
     if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
   };
 
-  console.log("currentItems", currentItems);
+  console.log("currentItems", banData);
+
+   const getListeners = async () => {
+     try {
+       const token = localStorage.getItem("authToken"); // Retrieve and parse user data
+       // const token = user?.token; // Extract the token
+
+       if (!token) {
+         console.error("No token found");
+         return;
+       }
+
+       const response = await axios.get(`${serverUrl}admins/listeners`, {
+         headers: {
+           Authorization: `Bearer ${token}`, // Include the token in the request
+         },
+         params: {
+           search: searchValue,
+          
+         },
+       });
+console.log("response.dat", response.data);
+     setBanData(response.data.data);
+       response.data.data.length > 0 && console.log(response.data.data);
+     } catch (error) {
+       console.error("Error fetching listeners:", error);
+     }
+   };
+    useEffect(() => {
+      getListeners();
+    }, []);
   return (
     <div>
       {" "}
@@ -131,19 +135,24 @@ console.log("banData", banData);
                       >
                         <td className="p-3 ">{item.name} </td>
                         <td className="p-3">
-                          {item?.banStatus?.rejectedCallsCount || "0"}{" "}
+                          {item?.rejectedCallsCount || "0"}{" "}
                         </td>
                         <td className="p-3">{item.banStatus?.banCount} </td>
                         <td className="p-3">
                           {item?.banStatus?.isBanned ? "Ban" : "Unban"}{" "}
                         </td>
                         <td className="p-3">
-                          {item?.banStatus?.unbanAt.slice(0, 10)}{" "}
+                          {(item?.banStatus?.unbanAt &&
+                            item?.banStatus?.unbanAt.slice(0, 10)) ||
+                            "Not Available"}
                         </td>
                         <td className="p  w-fit">
                           {" "}
                           <Link
-                            state={{ from: "Rejected" }}
+                            state={{
+                              from: "Rejected",
+                              ...item
+                            }}
                             to={"/ListenerManagement/CreatedListener"}
                           >
                             <div className="border-[1px] cursor-pointer rounded-[6px] px-4 py-1 border-black w-fit">

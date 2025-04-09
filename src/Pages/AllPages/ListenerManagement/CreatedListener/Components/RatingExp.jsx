@@ -6,45 +6,12 @@ import { FiPhoneCall } from "react-icons/fi";
 import { FiVideo } from "react-icons/fi";
 import { PiMedalFill } from "react-icons/pi";
 
-function RatingExp() {
+function RatingExp({ listner }) {
   const [showPricing, setShowPricing] = useState("High to low");
 
-  let RatingData = [
-    {
-      ratingCount: 4,
-      date: "11-12-24",
-      text: "Talking to Mohit was a relief. He listened without judgment and made me feel truly understood",
-    },
-    {
-      ratingCount: 2,
-      date: "11-12-24",
-      text: "Talking to Mohit was a relief. He listened without judgment and made me feel truly understood",
-    },
-    {
-      ratingCount: 4,
-      date: "11-12-24",
-      text: "Talking to Mohit was a relief. He listened without judgment and made me feel truly understood",
-    },
-    {
-      ratingCount: 1,
-      date: "11-12-24",
-      text: "Talking to Mohit was a relief. He listened without judgment and made me feel truly understood",
-    },
-    {
-      ratingCount: 4,
-      date: "11-12-24",
-      text: "Talking to Mohit wmade me feel truly understood",
-    },
-    {
-      ratingCount: 4,
-      date: "11-12-24",
-      text: "Talking to Mohit was a relief. He listened without judgment and made me feel truly understood",
-    },
-    {
-      ratingCount: 4,
-      date: "11-12-24",
-    },
-  ];
+
+
+  
   return (
     <div className="px-7 pt-4 pb-16 flex gap-7">
       <div className=" w-[60%]  bg-white rounded-[24px] px-[40px] py-[30px] flex flex-col">
@@ -79,19 +46,23 @@ function RatingExp() {
         {/* Rating data */}
         <div className="">
           <div className="flex  flex-col gap-[12px]">
-            {RatingData.map((item) => {
+            {[...(listner?.reviews || [])]
+      .sort((a, b) =>
+        showPricing === "High to low" ? b.rating - a.rating : a.rating - b.rating
+      ).map((item) => {
+              console.log("item", item);
               return (
                 <div className="bg-[#f0f0f0] p-[16px] rounded-[12px]  flex flex-col gap-[12px]">
                   <div className="flex justify-between items-center">
                     <div className="flex gap-1">
                       {" "}
-                      {Array.from({ length: item.ratingCount }).map((_, i) => (
+                      {Array.from({ length: item.rating }).map((_, i) => (
                         <GoStarFill key={i} />
                       ))}
                     </div>
-                    <span>{item.date}</span>
+                    <span>{item.timestamp.slice(0, 10)}</span>
                   </div>
-                  <div className="text">{item.text}</div>
+                  <div className="text">{item.reviewText}</div>
                 </div>
               );
             })}

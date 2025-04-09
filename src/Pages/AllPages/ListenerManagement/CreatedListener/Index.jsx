@@ -19,7 +19,7 @@ function CreatedListener() {
     const listner = location.state
     const status = location.state.profileStatus
     console.log(location.state.profileStatus, "from");
-    console.log(status,"status")
+    console.log(listner, "listner");
 
     
    
