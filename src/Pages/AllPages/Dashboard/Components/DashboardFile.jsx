@@ -30,8 +30,10 @@ function DashboardFile() {
        const response = await axios.get(`${API_ENDPOINTS.getDasboard}`, {
          headers: { Authorization: `Bearer ${token}` },
        });
+
        console.log("response", response.data);
        setDashbaordData(response.data);
+
      } catch (error) {
        console.error("Error fetching listeners:", error);
      }
@@ -104,6 +106,7 @@ let ratingBreakdown = dashbaordData?.overallRating?.ratingBreakdown || {};
    );
 
 let sessionComparison = dashbaordData?.sessionComparison
+
  const { chat, phoneCall, videoCall } = sessionComparison || {};
 
 console.log("dashbaordData?.userDetails,", sessionComparison);
@@ -135,7 +138,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
               <HiUsers className="text-[28px]" />
             </div>
             <span className="text-[32px]">
-              {dashbaordData?.overview.newUsers}
+              {dashbaordData?.overview?.newUsers}
             </span>
             <span className="text-[16px] text-[#808080]">New Users</span>
           </div>
@@ -145,7 +148,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
             </div>
             <span className="text-[32px]">
               {" "}
-              {dashbaordData?.overview.newListeners}{" "}
+              {dashbaordData?.overview?.newListeners}{" "}
             </span>
             <span className="text-[16px] text-[#808080]">New Listeners</span>
           </div>
@@ -154,7 +157,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
               <LuIndianRupee className="text-[28px]" />
             </div>
             <span className="text-[32px]">
-              {Math.round(dashbaordData?.overview.totalCredited)}
+              {Math.round(dashbaordData?.overview?.totalCredited)}
             </span>
             <span className="text-[16px] text-[#808080]">Total Credited </span>
           </div>
@@ -163,7 +166,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
               <FaPhone className="text-[28px]" />
             </div>
             <span className="text-[32px]">
-              {dashbaordData?.overview.totalSessions}
+              {dashbaordData?.overview?.totalSessions}
             </span>
             <span className="text-[16px] text-[#808080]">Total Sessions</span>
           </div>
@@ -177,7 +180,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
         <div className="boxes flex gap-3 w-full">
           <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
             <span className="text-[24px] text-black mb-2 font-medium">
-              ₹ {Math.round(dashbaordData?.paymentOverview.successfulPayments)}
+              ₹ {Math.round(dashbaordData?.paymentOverview?.successfulPayments)}
             </span>
             <span className=" text-[16px] text-[#808080] text-center">
               Successful Payments to Listener
@@ -185,7 +188,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
           </div>
           <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
             <span className="text-[24px] text-black mb-2 font-medium">
-              ₹{Math.round(dashbaordData?.paymentOverview.pendingPayments)}
+              ₹{Math.round(dashbaordData?.paymentOverview?.pendingPayments)}
             </span>
             <span className=" text-[16px] text-[#808080] text-center">
               Pending Payments to Listener
@@ -194,7 +197,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
           <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
             <span className="text-[24px] text-black mb-2 font-medium">
               ₹
-              {Math.round(dashbaordData?.paymentOverview.listenerWalletBalance)}
+              {Math.round(dashbaordData?.paymentOverview?.listenerWalletBalance)}
             </span>
             <span className=" text-[16px] text-[#808080] text-center">
               Listener’s wallet balance
@@ -202,7 +205,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
           </div>
           <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
             <span className="text-[24px] text-black mb-2 font-medium">
-              ₹{Math.round(dashbaordData?.paymentOverview.userWalletBalance)}
+              ₹{Math.round(dashbaordData?.paymentOverview?.userWalletBalance)}
             </span>
             <span className=" text-[16px] text-[#808080] text-center">
               User’s wallet balance
@@ -210,10 +213,19 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
           </div>
           <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
             <span className="text-[24px] text-black mb-2 font-medium">
-              ₹{Math.round(dashbaordData?.paymentOverview.totalAmountCredited)}
+              ₹{Math.round(dashbaordData?.paymentOverview?.totalAmountCredited)}
             </span>
             <span className=" text-[16px] text-[#808080] text-center">
               Total Amount Credited
+            </span>
+          </div>
+          <div className="1  w-1/5 border-[1px] border-[#808080] rounded-[16px] px-[20px] py-[20px] flex flex-col justify-center items-center">
+            <span className="text-[24px] text-black mb-2 font-medium">
+              ₹
+              {Math.round(dashbaordData?.paymentOverview?.totalCommissionEarned)}
+            </span>
+            <span className=" text-[16px] text-[#808080] text-center">
+              Total Commission Earned
             </span>
           </div>
         </div>
@@ -224,14 +236,14 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
           <div className="heading mb-7 flex justify-between">
             <span className="text-[24px] text-black">Ongoing Sessions</span>
             <span className="text-[24px] text-black">
-              {dashbaordData?.sessions.ongoingSessions}
+              {dashbaordData?.sessions?.ongoingSessions}
             </span>
           </div>
           <div className="botom  w-full">
             <div className="chat text-[20px] w-full flex justify-between">
               <div>Chat</div>
               <div className="progress w-2/3 flex justify-end items-center gap-[10px]">
-                <span>{dashbaordData?.sessions.chatSessions}</span>
+                <span>{dashbaordData?.sessions?.chatSessions}</span>
                 <div className="w-[130px]">
                   <Progressbar
                     progress={getProgress(
@@ -245,7 +257,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
             <div className="chat my-3 text-[20px] w-full flex justify-between">
               <div>Phone Call</div>
               <div className="progress w-2/3   flex justify-end items-center gap-[10px]">
-                <span>{dashbaordData?.sessions.phoneCallSessions}</span>
+                <span>{dashbaordData?.sessions?.phoneCallSessions}</span>
                 <div className="w-[130px]">
                   <Progressbar
                     progress={getProgress(
@@ -259,7 +271,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
             <div className="chat text-[20px] w-full flex justify-between">
               <div>Video Call</div>
               <div className="progress w-2/3 flex justify-end items-center gap-[10px]">
-                <span>{dashbaordData?.sessions.videoCallSessions}</span>
+                <span>{dashbaordData?.sessions?.videoCallSessions}</span>
                 <div className="w-[130px]">
                   <Progressbar
                     progress={getProgress(
@@ -276,14 +288,14 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
           <div className="heading mb-7 flex justify-between">
             <span className="text-[24px] text-black">Total Sessions</span>
             <span className="text-[24px] text-black">
-              {dashbaordData?.sessions.totalSessions}
+              {dashbaordData?.sessions?.totalSessions}
             </span>
           </div>
           <div className="botom  w-full">
             <div className="chat text-[20px] w-full flex justify-between">
               <div>Accepted</div>
               <div className="progress w-2/3 flex justify-end items-center gap-[10px]">
-                <span>{dashbaordData?.sessions.acceptedSessions}</span>
+                <span>{dashbaordData?.sessions?.acceptedSessions}</span>
                 <div className="w-[130px]">
                   <Progressbar
                     progress={getProgress(
@@ -297,7 +309,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
             <div className="chat my-3 text-[20px] w-full flex justify-between">
               <div>Missed </div>
               <div className="progress w-2/3   flex justify-end items-center gap-[10px]">
-                <span>{dashbaordData?.sessions.missedSessions}</span>
+                <span>{dashbaordData?.sessions?.missedSessions}</span>
                 <div className="w-[130px]">
                   <Progressbar
                     progress={getProgress(
@@ -311,7 +323,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
             <div className="chat text-[20px] w-full flex justify-between">
               <div>Rejected </div>
               <div className="progress w-2/3 flex justify-end items-center gap-[10px]">
-                <span>{dashbaordData?.sessions.rejectedSessions}</span>
+                <span>{dashbaordData?.sessions?.rejectedSessions}</span>
                 <div className="w-[130px]">
                   <Progressbar
                     progress={getProgress(
@@ -342,7 +354,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
                   <span className="text-[16px]">In session</span>
                 </div>
                 <span className="text-[16px]">
-                  {dashbaordData?.listenerDetails.inSession}
+                  {dashbaordData?.listenerDetails?.inSession}
                 </span>
               </div>
               <div className="1 flex justify-between items-center">
@@ -352,7 +364,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
                 </div>
                 <span className="text-[16px]">
                   {" "}
-                  {dashbaordData?.listenerDetails.online}
+                  {dashbaordData?.listenerDetails?.online}
                 </span>
               </div>
               <div className="1 flex pb-2 border-b-[1px] border-[#D9D9D9] justify-between items-center">
@@ -362,13 +374,13 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
                 </div>
                 <span className="text-[16px]">
                   {" "}
-                  {dashbaordData?.listenerDetails.offline}
+                  {dashbaordData?.listenerDetails?.offline}
                 </span>
               </div>
             </div>
             <div className="strenth flex  text-[16px] justify-between items-center">
               <span>Total strenth</span>{" "}
-              <span> {dashbaordData?.listenerDetails.totalStrength}</span>
+              <span> {dashbaordData?.listenerDetails?.totalStrength}</span>
             </div>
           </div>
         </div>
@@ -387,7 +399,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
                   <span className="text-[16px]">In session</span>
                 </div>
                 <span className="text-[16px]">
-                  {dashbaordData?.userDetails.inSession}
+                  {dashbaordData?.userDetails?.inSession}
                 </span>
               </div>
               <div className="1 flex justify-between items-center">
@@ -396,7 +408,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
                   <span className="text-[16px]"> Online</span>
                 </div>
                 <span className="text-[16px]">
-                  {dashbaordData?.userDetails.online}
+                  {dashbaordData?.userDetails?.online}
                 </span>
               </div>
               <div className="1 flex pb-2 border-b-[1px] border-[#D9D9D9] justify-between items-center">
@@ -406,13 +418,13 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
                 </div>
                 <span className="text-[16px]">
                   {" "}
-                  {dashbaordData?.userDetails.offline}
+                  {dashbaordData?.userDetails?.offline}
                 </span>
               </div>
             </div>
             <div className="strenth flex  text-[16px] justify-between items-center">
               <span>Total strenth</span>{" "}
-              <span> {dashbaordData?.userDetails.totalUsers}</span>
+              <span> {dashbaordData?.userDetails?.totalUsers}</span>
             </div>
           </div>
         </div>
@@ -422,7 +434,7 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
         <div className="graoh w-3/4 px-[40px]   py-[30px] rounded-[24px] bg-white">
           <div className="heading p-7 text-[24px]">Funds Credited</div>
           <div className="grapgh">
-            <LinesScatterGraph />
+            {/* <LinesScatterGraph /> */}
           </div>
         </div>
 
@@ -461,12 +473,12 @@ console.log("dashbaordData?.userDetails,", sessionComparison);
             <div className="left w-1/2 flex flex-col justify-center items-center">
               <div className="flex   items-center gap-2">
                 <span className="text-[40px] font-semibold">
-                  {dashbaordData?.overallRating.rating}
+                  {dashbaordData?.overallRating?.rating}
                 </span>
                 <GoStarFill className="text-[40px]" />{" "}
               </div>
               <span className="text-[18px] ">
-                ({dashbaordData?.overallRating.totalReviews})
+                ({dashbaordData?.overallRating?.totalReviews})
               </span>
             </div>
             <div className="right w-1/2 flex flex-col gap-[5px]">

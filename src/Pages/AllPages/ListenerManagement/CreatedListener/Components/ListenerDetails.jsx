@@ -122,7 +122,6 @@ function ListenerDetails({ listner, status }) {
   const getListener = async () => {
     try {
       const token = localStorage.getItem("authToken"); // Retrieve and parse user data
-      // const token = user?.token; // Extract the token
 
       if (!token) {
         console.error("No token found");
@@ -141,11 +140,14 @@ function ListenerDetails({ listner, status }) {
       setListnerData(response.data.listener); // Ensure you're accessing response.data
       setAvailability(response.data.listener.availability);
       setEmail(response.data.listener.email);
-      setAge(response.data.listener.age);
+      setAge( response.data.listener?.pendingUpdates?.age ? response.data.listener?.pendingUpdates?.age : response.data.listener.age);
       setPhone(response.data.listener.phone);
-      setProfileImage(response.data.listener.profilePicture);
-      setBio(response.data.listener.description);
-      setName(response.data.listener.name);
+      setProfileImage(
+        response.data.listener?.pendingUpdates?. profilePicture ? response.data.listener?.pendingUpdates?.profilePicture : response.data.listener
+          .profilePicture
+      );
+      setBio(response.data.listener?.pendingUpdates?.description ? response.data.listener?.pendingUpdates?.description : response.data.listener.description);
+      setName( response.data.listener?.pendingUpdates?.name ? response.data.listener?.pendingUpdates?.name : response.data.listener.name);
 
       console.log("esponse.data.data.email", response.data);
     } catch (error) {

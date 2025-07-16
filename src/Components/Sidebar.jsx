@@ -73,7 +73,10 @@ function Sidebar() {
           <BiSolidDiscount className='text-[24px]'/> <span className='text-[16px]'>Coupon Management</span>
 </Link>
       </div>
-      <div className=" pl-[20px] pt-16 py-[16px]  text-[#808080] gap-[14px] flex justify-start items-center ">
+      <div onClick={()=>{
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("user");
+      }} className=" pl-[20px] pt-16 py-[16px]  text-[#808080] gap-[14px] flex justify-start items-center ">
           <TbLogout2 className='text-[24px]'/> <span className='text-[16px]'>Logout</span>
 </div>
     </div>

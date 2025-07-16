@@ -34,8 +34,8 @@ function DeclinedSession({ listner }) {
           },
         }
       );
-setData(response.data)
-      console.log("esponse.data.data.email", response.data);
+      setData(response.data)
+      console.log("response.data.data.email", response.data);
     } catch (error) {
       console.error("Error fetching listeners:", error);
     }

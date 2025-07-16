@@ -8,7 +8,7 @@ const API_ENDPOINTS = {
   getTransactions: `${BASE_URL}wallet/transaction-details`,
   getUsersTransactions: `${BASE_URL}wallet/user-transactions/`,
   getAllBlogs: `${BASE_URL}blogs/all`,
-  createBlog: `${BASE_URL}blogs//create`,
+  createBlog: `${BASE_URL}blogs/create`,
   getBlogDetails: `${BASE_URL}blogs/`, // blogId
   updateBlog: `${BASE_URL}blogs/`, // blogId
   deleteBlog: `${BASE_URL}blogs/`, // blogId method -delete

@@ -73,7 +73,7 @@ function Login() {
   
       if (validateForm()) {
           try {
-              const { data } = await axios.post(`${serverUrl}admins/login`, { email, password });
+              const {data}  = await axios.post(`${serverUrl}admins/login`, { email, password });
   
               console.log('Login successful:', data);
               
@@ -85,13 +85,13 @@ function Login() {
             const token = localStorage.getItem('authToken');
             const user = JSON.parse(localStorage.getItem('user'));
 
-            console.log('Token:', token);
-            console.log('User:', user);
-toast.success(data.message);
+            // console.log('Token:', token);
+            // console.log('User:', user);
+// toast.success(data.message);
               navigate('/Dashboard')
               // Handle successful login (e.g., store token, redirect user)
           } catch (error) {
-            toast.error(error.response.data.message);
+            toast.error(error?.response?.data?.message);
               console.error('Login failed:', error.response?.data?.message || error.message);
           }
       }
