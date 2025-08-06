@@ -19,18 +19,7 @@ function WalletManagement() {
   const [searchQuery, setSearchQuery] = useState("");
   const [walletData, setWalletData] = useState([]);
 
-  let tableData = [
-    {
-      phone: " 6355806885",
-      walletbalance: " 1,200.45",
-      totalcredited: "1200",
-    },
-    {
-      phone: " 6355806885",
-      walletbalance: " 1,200.45",
-      totalcredited: "1200",
-    },
-  ];
+ 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9; // Number of rows per page
@@ -141,7 +130,7 @@ console.log("response.data", response.data);
               </div>
             </div>
             <Link
-              to="/User&WalletDetails/MinimumWalletBalance"
+              to="/user-wallet-details/minimumwalletbalance"
               className="right cursor-pointer flex self-center  text-white rounded-[8px] items-center bg-[#3A3A3A] px-5 py-3 gap-2 w-fit"
             >
               Minimum Wallet Balance <IoArrowForward className="text-[20px]" />
@@ -222,7 +211,7 @@ console.log("response.data", response.data);
                               phone: item.phone,
                               
                             }}
-                            to="/User&WalletDetails/WalletDetails"
+                            to="/user-wallet-details/walletdetails"
                           >
                             <div className="border-[1px] cursor-pointer rounded-[6px] px-4 py-1 border-black w-fit">
                               <IoArrowForward className="text-[18px] font-normal" />

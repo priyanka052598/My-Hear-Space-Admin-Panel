@@ -28,7 +28,7 @@ function Sidebar() {
    const isDashboardActive=location.pathname==="/Dashboard"
    const isPaymentManagementActive=location.pathname==="/PaymentManagement" || location.pathname=== "PaymentManagement/SuccessfulPayment" || location.pathname=== "/PaymentManagement/PendingPayment"
    const isRateManagement=location.pathname==="/RateManagement"
-   const isWalletManagement=location.pathname==="/User&WalletDetails"||location.pathname==="/User&WalletDetails/MinimumWalletBalance" || location.pathname==="/User&WalletDetails/WalletDetails"
+   const isWalletManagement=location.pathname==="/user-wallet-details"||location.pathname==="/user-wallet-details/minimumwalletbalance" || location.pathname==="/user-wallet-details/walletdetails"
    const isUserFeedback=location.pathname==="/UserFeedback"
    const isBlogManagement=location.pathname==="/BlogManagement"||location.pathname==="/BlogManagement/AddNewBlog"||location.pathname=== "/BlogManagement/EditBlog"
    const isSessionRejected=location.pathname==="/SessionRejected"
@@ -53,7 +53,7 @@ function Sidebar() {
 <Link to="/RateManagement" className={` pl-[20px] py-[16px]  ${isRateManagement?  "bg-[#3A3A3A] text-white border-l-[3px] border-white": "text-[#808080]"} gap-[14px] flex justify-start items-center `}>
           <TbCirclePercentage className='text-[24px]'/> <span className='text-[16px]'>Rate Management</span>
 </Link>
-<Link to="/User&WalletDetails" className={` pl-[20px] py-[16px]  ${isWalletManagement?  "bg-[#3A3A3A] text-white border-l-[3px] border-white": "text-[#808080]"} text-[#808080] gap-[14px] flex justify-start items-center `}>
+<Link to="/user-wallet-details" className={` pl-[20px] py-[16px]  ${isWalletManagement?  "bg-[#3A3A3A] text-white border-l-[3px] border-white": "text-[#808080]"} text-[#808080] gap-[14px] flex justify-start items-center `}>
           <FiUsers className='text-[24px]'/> <span className='text-[16px]'>User & Wallet Details</span>
 </Link>
 

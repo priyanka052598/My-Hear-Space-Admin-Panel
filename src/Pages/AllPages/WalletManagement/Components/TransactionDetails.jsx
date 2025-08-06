@@ -117,7 +117,7 @@ function TransactionDetails() {
                       walletBalance: item.walletbalance,
                       totalCredited: item.totalcredited,
                     }}
-                    to="/User&WalletDetails/WalletDetails"
+                    to="/user-wallet-details/walletdetails"
                   >
                     <div className="border-[1px] cursor-pointer rounded-[6px] px-4 py-1 border-black w-fit">
                       <IoArrowForward className="text-[18px] font-normal" />

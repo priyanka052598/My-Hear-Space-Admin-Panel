@@ -49,42 +49,7 @@ function WalletDetails() {
      }, []);
 
     console.log("state", state);
-    let data=[{
-        status:'Chat',
-        date:"11/12/24",
-        time:"20:00",
-        amount:"400"
-
-    },
-    {
-        status:'Chat',
-        date:"11/12/24",
-        time:"20:00",
-        amount:"400"
-
-    },
-    {
-        status:'Chat',
-        date:"11/12/24",
-        time:"20:00",
-        amount:"400"
-
-    },
-    {
-        status:'Chat',
-        date:"11/12/24",
-        time:"20:00",
-        amount:"400"
-
-    },
-    {
-        status:'Chat',
-        date:"11/12/24",
-        time:"20:00",
-        amount:"400"
-
-    },
-]
+ 
   return (
     <div className="flex h-screen bg-[#F0F0F0]">
       <Sidebar />
@@ -99,7 +64,7 @@ function WalletDetails() {
               <IoIosArrowForward className="text-[#808080]" />
             </div>
             <Link
-              to="/User&WalletDetails"
+              to="/user-wallet-details"
               className="  flex justify-start items-center gap-1"
             >
               <div className=" text-[#808080]">User and Wallet Details</div>
